@@ -67,7 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 cell.addEventListener("click", function () {
                     const selectedCategory = categorySelect.value;
                     const ca = caPhan.value;
-                    console.log(categorySelect.options[categorySelect.selectedIndex].text);
+                     labelGiaoVien =categorySelect.options[categorySelect.selectedIndex].text;
+                     labelCaPhan = caPhan.options[caPhan.selectedIndex].text
                     
                     if (selectedData.some(item => item.date === formattedDate)) {
                         alert("Ngày này đã được chọn!");
@@ -75,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     markedDates.push(formattedDate);
-                    selectedData.push({ date: formattedDate, idUser: selectedCategory, labelGv: labelGiaoVien, caPhan: ca, labelCaPhan: labelCaPhan  });
+                    selectedData.push({ date: formattedDate, idUser: selectedCategory, labelGv: labelGiaoVien, codeCa: ca, nameCar: labelCaPhan  });
                     addRowToTable(formattedDate, selectedCategory,labelGiaoVien, ca, labelCaPhan);
                      cell.classList.add("marked");
                 });
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
             actionTableBody.appendChild(row);
 
             row.querySelector(".remove-btn").addEventListener("click", function () {
-                const index = selectedData.findIndex(item => item.date === date && item.idUser === idUser);
+                const index = selectedData.findIndex(item => item.date === date && item.idUser === idUser && item.codeCar ===ca) ;
 
                 if (index !== -1) {
                     selectedData.splice(index, 1);
