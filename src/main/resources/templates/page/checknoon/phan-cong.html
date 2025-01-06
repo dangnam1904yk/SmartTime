@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/share/header :: header}">
+
+</head>
+<style>
+       table { width: 100%; border-collapse: collapse; }
+       td { width: 14%; height: 50px; text-align: center; cursor: pointer; }
+       .marked { background: red; color: white; }
+       .selected { background: blue; color: white; }
+       .action-table { margin-top: 20px; }
+       th, td { padding: 5px; border: 1px solid black; }
+    .selected {
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+}
+    .marked {
+    background-color: red;
+    color: white;
+    pointer-events: none; /* Vô hiệu hóa hành động click */
+    cursor: not-allowed; /* Hiển thị biểu tượng không cho phép */
+}
+    #calendar-body td:hover {
+background-color: lightblue;
+    }
+    #month-year {
+    font-size: 1.2rem;
+}
+
+td {
+    height: 50px;
+    vertical-align: middle;
+}
+
+td.marked {
+    background-color: #e30e0e; /* Màu vàng nhạt */
+    color: #fff; /* Chữ trắng */
+    font-weight: bold;
+}
+
+
+
+</style>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div th:replace="~{/share/menu-left :: nav-left}">
+    </div>
+    <div class="content">
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="categorySelect" class="font-weight-bold">Chọn giáo viên</label>
+                        <select id="categorySelect" class="form-control">
+                            <option value="Y">Nguyễn Bảo Yến</option>
+                            <option value="G">Hoàng Giang</option>
+                        </select>
+                    </div>
+                </div>
+                    <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="ca" class="font-weight-bold">Chọn ca</label>
+                        <select id="ca" class="form-control">
+                            <option value="CA1">Ca 1: 12h05 - 12h35</option>
+                            <option value="CA2">Ca 2: 12h50 - 13h25</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="col-12 col-md-6" style="border : 1px solid darkgrey;border-radius: 7px;">
+                    <!-- Lịch -->
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <button id="prev-month" class="btn btn-outline-primary btn-sm">&lt;</button>
+                        <span id="month-year" class="font-weight-bold"></span>
+                        <button id="next-month" class="btn btn-outline-primary btn-sm">&gt;</button>
+                    </div>
+                    <table class="table table-bordered text-center">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>T2</th>
+                            <th>T3</th>
+                            <th>T4</th>
+                            <th>T5</th>
+                            <th>T6</th>
+                            <th>T7</th>
+                            <th>CN</th>
+                        </tr>
+                        </thead>
+                        <tbody id="calendar-body">
+                        <!-- Lịch sẽ được render tại đây -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+                <div class="col-12">
+                    <div class="bg-secondary rounded h-100 p-4">
+                        <h6 class="mb-4">Kết quả phân công</h6>
+                        <div class="table-responsive">
+                            <table class="table action-table">
+                                <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Id</th>
+                                    <th>Giáo viên</th>
+                                    <th>Id Ca</th>
+                                    <th>Ca trông</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody  id ="action-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/calendar.js}">
+
+</script>
+<th:block th:replace="~{/share/footer :: footer}"></th:block>
+</html>

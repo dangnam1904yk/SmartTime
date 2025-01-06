@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/share/header :: header}">
+
+</head>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div th:replace="~{/share/menu-left :: nav-left}">
+    </div>
+    <div class="content">
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-12 col-xl-12">
+                    <div class="bg-secondary rounded h-100 p-4">
+                        <h6 class="mb-4">[[${type}]]</h6>
+                        <form action="/user/save" method="post" th:object=${user}>
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label" >Tên đầy đủ</label>
+                                <input type="hidden" class="form-control" th:field="*{id}">
+                                <input type="text" class="form-control" th:field="*{fullName}" id="fullName" placeholder="Tên đầy đủ">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label" >Email</label>
+                                <input type="email" class="form-control" th:field="*{email}" id="email" placeholder="email">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label" >Mật khẩu</label>
+                                <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Mật khẩu">
+                            </div>
+                            <div class="mb-3">
+                                <label for="floatingSelect" class="form-label">Vai trò</label>
+                                <select class="form-select" id="floatingSelect"  name="role"
+                                        >
+                                    <th:block th:each="item :${roles}">
+<!--                                        <option  th:if="${item.id ==user.getRole().get(0).getId()}" selected="selected"-->
+<!--                                                 th:value="${item.id}" th:text="${item.nameRole}"></option>-->
+<!--                                        <option  th:unless="${item.id ==user.getRole().get(0).getId()}"-->
+<!--                                                 th:value="${item.id}" th:text="${item.nameRole}"></option>-->
+
+                                        <option
+                                                 th:value="${item.id}" th:text="${item.nameRole}"></option>
+                                    </th:block>
+                                </select>
+
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" th:field="*{active}" id="isActive">
+                                <label class="form-check-label" for="isActive">Hiệu lực</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:replace="~{/share/footer :: footer}"></th:block>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/share/header :: header}">
+
+</head>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div th:replace="~{/share/menu-left :: nav-left}">
+    </div>
+    <div class="content">
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="bg-secondary rounded h-100 p-4">
+                        <h6 class="mb-4">Danh sánh người dùng</h6>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th style="display:none"> id</th>
+                                    <th scope="col">Tên đầy đủ</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Thao tác </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="c,index : ${users}">
+                                    <th scope="row" th:text="${index.count}"></th>
+                                    <td style="display: none"  th:text="${c.id}"></td>
+                                    <td  th:text="${c.fullName}"></td>
+                                    <td  th:text="${c.email}"></td>
+                                    <th:block th:if="${c.active==false}">
+                                        <td>Hết hiệu lực</td>
+                                    </th:block>
+                                    <th:block th:if="${c.active==true}">
+                                        <td>Hiệu lực</td>
+                                    </th:block>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:replace="~{/share/footer :: footer}"></th:block>
+</html>
