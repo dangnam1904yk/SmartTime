@@ -1,5 +1,6 @@
 package com.vinschool.smarttime.controller;
 
+import java.net.http.HttpRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vinschool.smarttime.entity.CheckNoon;
+import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.response.CheckNoonResponsive;
+import com.vinschool.smarttime.service.CheckNoonService;
 import com.vinschool.smarttime.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CheckNoonController {
@@ -22,28 +30,43 @@ public class CheckNoonController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CheckNoonService checkNoonService;
+
     @GetMapping("/trong-trua")
-    public String CreatDate(Model model) {
+    public String CreatDate(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("listUser", userService.getAll());
+        if (user == null)
+            return "redirect:/dang-nhap";
+
+        if (user.getEmail().toLowerCase().startsWith("admin")) {
+            model.addAttribute("list", checkNoonService.findByUserIdCreateAndTimeLine(user.getId(), "2025-01"));
+        } else {
+            model.addAttribute("list", checkNoonService.findByUserIdWorkAndTimeLine(user.getId(), "2025-01"));
+
+        }
+        return "page/checknoon/list";
+    }
+
+    @GetMapping("/lap-lich-trong-trua")
+    public String FormLapLich(Model model) {
         model.addAttribute("users", userService.getAll());
         return "page/checknoon/phan-cong";
     }
 
     @PostMapping("/lap-lich-trong-trua")
-    public String CreateTimeLine(@RequestParam("data") String data)
-            throws JsonMappingException, JsonProcessingException {
-        System.out.println("Dữ liệu đã chọn: " + data);
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Map<String, Object>> dataList = objectMapper.readValue(data, new TypeReference<>() {
-        });
-        for (Map<String, Object> item : dataList) {
-            System.out.println("ID: " + item.get("date"));
-            System.out.println("Name: " + item.get("idUser"));
-            System.out.println("Age: " + item.get("codeCa"));
-            System.out.println("Age: " + item.get("nameCa"));
-
-            System.out.println("-----------------");
-        }
+    public String CreateTimeLine(@RequestParam("data") String data, @RequestParam("timeLine") String timeLine,
+            HttpServletRequest request) {
+        checkNoonService.LuuPhanCongLich(data, timeLine, request);
         return "page/checknoon/list";
+    }
+
+    @PostMapping("/cham-cong")
+    public String ChamCong(@RequestParam("data") String data, HttpServletRequest request) {
+        checkNoonService.ChamCong(data, request);
+        return "redirect:/trong-trua";
     }
 
 }

@@ -14,8 +14,8 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-     @Column(length = 50)
-    String id  ;
+    @Column(length = 50)
+    String id;
     String fullName;
     String password;
     @Column(length = 10)
@@ -23,11 +23,11 @@ public class User {
     @Column(unique = true)
     String email;
     String displayName;
-    boolean active ;
+    boolean active;
     String avatar;
     Date createDate;
     Date updateDate;
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     List<Role> role;
 
 }

@@ -72,6 +72,12 @@
         /* Chữ trắng */
         font-weight: bold;
     }
+    .form-group > div {
+        flex: 1;
+    }
+    .form-group > div:first-child {
+        margin-right: 10px;
+    }
 </style>
 
 <body>
@@ -86,75 +92,87 @@
         <div th:replace="~{/share/menu-left :: nav-left}">
         </div>
         <div class="content">
+            <nav th:replace="~{/share/header-top :: header-top}"></nav>
+
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
-                    <div class="col-6 col-md-6" style="display: flex;">
-                        <div class="form-group">
-                            <label for="thangPhanCong" class="font-weight-bold">Tháng phân công</label>
-                            <input type="text" id="thangPhanCong"  name="thangPhanCong" placeholder="MM/YYYY" pattern="(0[1-9]|1[0-2])/[0-9]{4}" required>
-                        </div>
+                    <div class="form-group d-flex  justify-content-between">
+                        <div class="col-6 col-md-6">
+                            <div class="form-group">
+                                <label for="thangPhanCong" class="font-weight-bold">Tháng phân công</label>
+                                <input type="month" id="thangPhanCong" name="thangPhanCong"  class="form-control" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="ca" class="font-weight-bold">Chọn ca</label>
-                            <select id="ca" class="form-control">
-                                <option value="CA1">Ca 1: 12h05 - 12h35</option>
-                                <option value="CA2">Ca 2: 12h50 - 13h25</option>
-                            </select>
+                            <div class="form-group">
+                                <label for="ca" class="font-weight-bold">Chọn ca</label>
+                                <select id="ca" class="form-control">
+                                    <option value="CA1">Ca 1: 12h05 - 12h35</option>
+                                    <option value="CA2">Ca 2: 12h50 - 13h25</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="categorySelect" class="font-weight-bold">Chọn giáo viên</label>
+                                <select id="categorySelect" class="form-control">
+                                    <th:block th:each="item :${users}">
+                                        <option th:value="${item.id}" th:text="${item.email}+' - ' +${item.fullName}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" class="form-check-input" name="isActive" id="isActive">
+                                <label class="form-check-label" for="isActive">Hiệu lực</label>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="col-6 col-md-6" style="border : 1px solid darkgrey;border-radius: 7px; padding: 10px;">
+                            <!-- Lịch -->
+                            <div class="d-flex justify-content-between align-items-center my-3">
+                                <button id="prev-month" class="btn btn-outline-primary btn-sm">&lt;</button>
+                                <span id="month-year" class="font-weight-bold"></span>
+                                <button id="next-month" class="btn btn-outline-primary btn-sm">&gt;</button>
+                            </div>
+                            <table class="table table-bordered text-center">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>T2</th>
+                                        <th>T3</th>
+                                        <th>T4</th>
+                                        <th>T5</th>
+                                        <th>T6</th>
+                                        <th>T7</th>
+                                        <th>CN</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendar-body">
+                                    <!-- Lịch sẽ được render tại đây -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6">
-                        <div class="form-group">
-                            <label for="categorySelect" class="font-weight-bold">Chọn giáo viên</label>
-                            <select id="categorySelect" class="form-control">
-                                <th:block th:each="item :${users}">
-                                    <option th:value="${item.id}" th:text="${item.email}+' - ' +${item.fullName}">
-                                    </option>
-                                </th:block>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6" style="border : 1px solid darkgrey;border-radius: 7px;">
-                        <!-- Lịch -->
-                        <div class="d-flex justify-content-between align-items-center my-3">
-                            <button id="prev-month" class="btn btn-outline-primary btn-sm">&lt;</button>
-                            <span id="month-year" class="font-weight-bold"></span>
-                            <button id="next-month" class="btn btn-outline-primary btn-sm">&gt;</button>
-                        </div>
-                        <table class="table table-bordered text-center">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>T2</th>
-                                    <th>T3</th>
-                                    <th>T4</th>
-                                    <th>T5</th>
-                                    <th>T6</th>
-                                    <th>T7</th>
-                                    <th>CN</th>
-                                </tr>
-                            </thead>
-                            <tbody id="calendar-body">
-                                <!-- Lịch sẽ được render tại đây -->
-                            </tbody>
-                        </table>
-                    </div>
+                    
                 </div>
             </div>
             <div class="col-12">
                 <div class="bg-secondary rounded h-100 p-4">
-                    <h6 class="mb-4">Kết quả phân công</h6>
-                    <button id="submit-data">Lưu</button>
+                    <div class="form-group d-flex  justify-content-between">
+                        <h6 class="mb-4" style="color: black;">Kết quả phân công</h6>
+                    <button id="submit-data" type="button" class="btn btn-success m-3">Lưu</button>
+                    </div>
 
                     <form id="selectedDataForm" th:action="@{/lap-lich-trong-trua}" method="post" style="display:none;">
                         <input type="hidden" id="dataInput" name="data" />
+                        <input type="hidden" id="timeLine"  name="timeLine" />
                     </form>
                     <div class="table-responsive">
                         <table class="table action-table">
                             <thead>
-                                <tr>
+                                <tr style="text-align: center;">
                                     <th>Ngày</th>
                                     <th>Giáo viên</th>
                                     <th>Ca trông</th>
-                                    <th>Hành động</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody id="action-table-body">
@@ -170,16 +188,7 @@
 </body>
 <script th:src="@{/js/calendar.js}">
 </script>
-<script>
-    const input = document.getElementById("thangPhanCong");
-    input.addEventListener("input", (e) => {
-      // Automatically format input to MM/YYYY
-      const value = e.target.value.replace(/[^0-9]/g, "");
-      if (value.length >= 3) {
-        e.target.value = value.slice(0, 2) + "/" + value.slice(2, 6);
-      }
-    });
-  </script>
+
 <th:block th:replace="~{/share/footer :: footer}"></th:block>
 
 </html>

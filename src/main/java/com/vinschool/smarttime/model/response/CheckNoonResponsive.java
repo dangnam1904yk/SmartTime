@@ -1,9 +1,7 @@
-package com.vinschool.smarttime.model.request;
+package com.vinschool.smarttime.model.response;
 
 import java.time.LocalDate;
 import java.util.Date;
-
-import com.vinschool.smarttime.entity.TimeLine;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,21 +10,25 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
-public class CheckNoonRequest {
+public class CheckNoonResponsive {
     String id;
+    LocalDate dateWork;
+    String idUserTrans;
+    boolean isCheck;
     String maCa;
     String nameCa;
-    LocalDate dateWork;
-    boolean isCheck;
     String note;
-    String idUserTrans;
+    String fullName;
     String idUser;
+    String idTimeLine;
     String createBy;
     Date createDate;
+    boolean isActive;
     String updateBy;
     Date updateDate;
-    TimeLine timeLine;
+    String month;
+    String email;
 }

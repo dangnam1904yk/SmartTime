@@ -6,8 +6,14 @@ import java.util.List;
 
 public interface UserService {
     void save(User user, String role);
-    void delete (String id);
-    User findById (String id);
-    User finByEmail( String email);
+
+    void delete(String id);
+
+    User findById(String id);
+
+    User finByEmail(String email);
+
     List<User> getAll();
+
+    User checkLogin(String email, String password);
 }

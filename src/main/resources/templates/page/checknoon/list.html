@@ -86,38 +86,82 @@
         <div th:replace="~{/share/menu-left :: nav-left}">
         </div>
         <div class="content">
+            <nav th:replace="~{/share/header-top :: header-top}"></nav>
             <div class="container-fluid pt-4 px-4">
                 <div class="col-12">
                     <div class="bg-secondary rounded h-100 p-4">
-                        <h6 class="mb-4">Kết quả phân công</h6>
-                        <button id="submit-data">Lưu</button>
-                        
-                        <div class="table-responsive">
-                            <table class="table action-table">
-                                <thead>
-                                    <tr>
-                                        <th>Ngày</th>
-                                        <th>Giáo viên</th>
-                                        <th>Ca trông</th>
-                                        <th>Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="action-table-body">
-                                </tbody>
-                            </table>
+                        <div class="form-group d-flex  justify-content-between">
+                            <h6 class="mb-4" style="color: black;">Kết quả phân công</h6>
+                            <button id="submit-data" type="button" class="btn btn-success m-3">Lưu</button>
+                        </div>
+                        <div style="display: none;">
+                            <form action="/cham-cong" method="post" id="selectedDataForm" >
+                                <input name="data" id="data">
+                            </form>
+                        </div>
+                        <div class="container-fluid pt-4 px-4">
+                            <div class="bg-secondary text-center rounded p-4">
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table text-start align-middle table-bordered table-hover mb-0" id="table-check-noon">
+                                        <thead>
+                                            <tr class="text-white" style="text-align: center;">
+                                                <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                                <th scope="col" style="display: none;"></th>
+                                                <th scope="col" style="max-width: 20px;">STT</th>
+                                                <th scope="col">Ngày Trông</th>
+                                                <th scope="col">Ca trông</th>
+                                                <th scope="col">Ghi chú</th>
+                                                <td scope="col">Người trực</td>
+                                                <!-- <td scope="col">Người trực thay</td> -->
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="p,index : ${list}">
+                                                <td><input class="form-check-input" type="checkbox" th:value="${p.isCheck}" th:checked="${p.isCheck}" ></td>
+                                                <td th:text="${p.id}" style="display: none;"></td>
+                                                <td th:text="${index.count}"></td>
+                                                <td th:text="${p.dateWork}"></td>
+                                                <td th:text="${p.nameCa}"></td>
+                                                <td th:text="${p.note}"></td>
+                                                <th:block th:each="u : ${listUser}">
+                                                    <th:block th:if=" ${u.id == p.idUser}">
+                                                        <td th:text="${u.fullName}"></td>
+                                                    </th:block>
+                                                </th:block>
+                                             
+                                             
+                                                <!-- <td th:text="${p.idUser}"></td> -->
+                                                <th:block th:if=" ${p.timeLine.isActive ==false}">
+                                                    <td>Không hiệu lực</td>
+                                                </th:block>
+                                                <th:block th:if=" ${p.timeLine.isActive ==true}">
+                                                    <td>Hiệu lực</td>
+                                                </th:block>
+                                                <td><a class="btn btn-sm btn-primary" href="">Sửa</a></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            
+
             </div>
-            
+
         </div>
     </div>
     </div>
     </div>
 </body>
 <script th:src="@{/js/calendar.js}">
-
+</script>
+<script th:src="@{/js/list-phan-cong.js}">
 </script>
 <th:block th:replace="~{/share/footer :: footer}"></th:block>
 

@@ -6,7 +6,12 @@ import java.util.List;
 
 public interface RoleService {
     void save(Role role);
+
     void delete(String id);
-    Role findById( String id);
+
+    Role findById(String id);
+
     List<Role> getAll();
+
+    Role findByCode(String code);
 }

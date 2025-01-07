@@ -4,12 +4,24 @@ document.addEventListener("DOMContentLoaded", function () {
         const prevMonth = document.getElementById("prev-month");
         const nextMonth = document.getElementById("next-month");
         const categorySelect = document.getElementById("categorySelect");
+        const isActive = document.getElementById("isActive");
         const caPhan =  document.getElementById("ca");
 
         const actionTableBody = document.getElementById("action-table-body");
         const submitDataButton = document.getElementById("submit-data");
         const selectedDataForm = document.getElementById("selectedDataForm");
         const dataInput = document.getElementById("dataInput");
+        const timeLine = document.getElementById("timeLine");
+        
+         // Lấy ngày hiện tại
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Thêm số 0 nếu tháng < 10
+
+    // Đặt giá trị mặc định cho input
+    const inputMonth = document.getElementById('thangPhanCong');
+      inputMonth.value = `${year}-${month}`;
+
         let labelGiaoVien = "";
         let labelCaPhan ="";
 
@@ -76,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     markedDates.push(formattedDate);
-                    selectedData.push({ date: formattedDate, idUser: selectedCategory, labelGv: labelGiaoVien, codeCa: ca, nameCar: labelCaPhan  });
+                    selectedData.push({ id: null, date: formattedDate, idUser: selectedCategory, labelGv: labelGiaoVien, codeCa: ca, nameCa: labelCaPhan  });
                     addRowToTable(formattedDate, selectedCategory,labelGiaoVien, ca, labelCaPhan);
                      cell.classList.add("marked");
                 });
@@ -122,6 +134,8 @@ document.addEventListener("DOMContentLoaded", function () {
         submitDataButton.addEventListener("click", function () {
             if (selectedData.length > 0) {
                 dataInput.value = JSON.stringify(selectedData); // Gắn JSON vào input hidden
+                const dataTimeLine = {isActive: isActive.value, month: inputMonth.value }
+                timeLine.value = JSON.stringify(dataTimeLine);
                 selectedDataForm.submit(); // Gửi form
             } else {
                 alert("Bạn chưa chọn ngày nào!");
