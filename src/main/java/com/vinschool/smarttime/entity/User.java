@@ -30,4 +30,7 @@ public class User {
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     List<Role> role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<TimeSheet> timeSheet;
+
 }

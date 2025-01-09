@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/share/header :: header}">
+
+</head>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        width: 14%;
+        height: 50px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .marked {
+        background: red;
+        color: white;
+    }
+
+    .selected {
+        background: blue;
+        color: white;
+    }
+
+    .action-table {
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        padding: 5px;
+        border: 1px solid black;
+    }
+
+    .selected {
+        background-color: blue;
+        color: white;
+        cursor: pointer;
+    }
+
+    .marked {
+        background-color: red;
+        color: white;
+        pointer-events: none;
+        /* Vô hiệu hóa hành động click */
+        cursor: not-allowed;
+        /* Hiển thị biểu tượng không cho phép */
+    }
+
+    #calendar-body td:hover {
+        background-color: lightblue;
+    }
+
+    #month-year {
+        font-size: 1.2rem;
+    }
+
+    td {
+        height: 50px;
+        vertical-align: middle;
+    }
+
+    td.marked {
+        background-color: #e30e0e;
+        /* Màu vàng nhạt */
+        color: #fff;
+        /* Chữ trắng */
+        font-weight: bold;
+    }
+    .form-group > div {
+        flex: 1;
+    }
+    .form-group > div:first-child {
+        margin-right: 10px;
+    }
+</style>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div th:replace="~{/share/menu-left :: nav-left}">
+        </div>
+        <div class="content">
+            <nav th:replace="~{/share/header-top :: header-top}"></nav>
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4" style="padding-bottom: 10px;">
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="thangPhanCong" class="font-weight-bold">Tháng phân công</label>
+                                <input type="month" id="thangPhanCong" name="thangPhanCong"  class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="categoryThu" class="font-weight-bold">Chọn thứ</label>
+                                <select id="categoryThu" class="form-control">
+                                    <option value="T2">Thứ 2 </option>
+                                    <option value="T3">Thứ 3</option>
+                                    <option value="T4">Thứ 4</option>
+                                    <option value="T5">Thứ 5</option>
+                                    <option value="T6">Thứ 6</option>
+                                    <option value="T7">Thứ 7</option>
+                                    <option value="CN">Chủ nhật </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="categoryUser" class="font-weight-bold">Chọn giáo viên</label>
+                                <select id="categoryUser" class="form-control">
+                                    <th:block th:each="item :${user}">
+                                        <option th:value="${item.id}" th:text="${item.email}+' - ' +${item.fullName}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="categoryClass" class="font-weight-bold">Chọn lớp dạy</label>
+                                <select id="categoryClass" class="form-control">
+                                    <th:block th:each="item :${class}">
+                                        <option th:value="${item.id}" th:text="${item.className}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="categoryRoom" class="font-weight-bold">Chọn phòng dạy</label>
+                                <select id="categoryRoom" class="form-control">
+                                    <th:block th:each="item :${rooms}">
+                                        <option th:value="${item.id}" th:text="${item.nameRoom}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="categoryPeriod" class="font-weight-bold">Chọn tiết dạy</label>
+                                <select id="categoryPeriod" class="form-control">
+                                    <th:block th:each="item :${period}">
+                                        <option th:value="${item.id}" th:text="${item.namePeriod}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <label for="categorySubject" class="font-weight-bold">Chọn môn học</label>
+                                <select id="categorySubject" class="form-control">
+                                    <th:block th:each="item :${subjects}">
+                                        <option th:value="${item.id}" th:text="${item.nameSubject}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-md-4">
+                            <div class="form-group">
+                                <input type="checkbox" class="form-check-input" name="isActive" id="isActive">
+                                <label class="form-check-label" for="isActive">Hiệu lực</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <button id="submit-add" type="button" class="btn btn-success m-3" style="margin: 0 !important;">Thêm</button>
+                        </div>
+            </div>
+            <div class="col-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <div class="form-group d-flex  justify-content-between">
+                        <h6 class="mb-4" style="color: black;">Kết quả lập lịch dạy</h6>
+                    <button id="submit-data" type="button" class="btn btn-success m-3">Lưu</button>
+                    </div>
+
+                    <form id="selectedDataForm" th:action="@{/lap-thoi-khoa-bieu}" method="post" style="display:none;">
+                        <input type="hidden" id="dataInput" name="data" />
+                        <input type="hidden" id="timeLine"  name="timeLine" />
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table action-table">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th style="display: none;"> uid</th>
+                                    <th style="display: none;"> id</th>
+                                    <th>Tiết dạy</th>
+                                    <th>Thứ</th>
+                                    <th>Lớp</th>
+                                    <th>Nơi dạy</th>
+                                    <th>Môn học</th>
+                                    <th>Giáo viên</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="action-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</body>
+<script th:src="@{/js/time-sheet-lap-lich.js}">
+</script>
+
+<th:block th:replace="~{/share/footer :: footer}"></th:block>
+
+</html>

@@ -6,17 +6,21 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryClass {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(length = 50)
-    private String id;
-    private String className;
-    private Date createDate;
-    private String createById;
-    private boolean isActive;
+    String id;
+    String className;
+    Date createDate;
+    String createById;
+    boolean isActive;
+
+    @OneToMany(mappedBy = "categoryClass", cascade = CascadeType.ALL)
+    List<TimeSheet> timeSheet;
 }
