@@ -16,4 +16,6 @@ public interface UserService {
     List<User> getAll();
 
     User checkLogin(String email, String password);
+
+    List<User> findUserByCodeRole(String codeRole);
 }

@@ -14,4 +14,10 @@ public interface NoteBookService {
     NoteBook findById(String id, HttpServletRequest request);
 
     List<NoteBook> findAll();
+
+    void saveAll(List<NoteBook> list);
+
+    void saveNoteBookFromStringData(String data, HttpServletRequest request);
+
+    void updateStatusNoteBook(String data, HttpServletRequest request);
 }

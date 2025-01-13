@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/share/header :: header}">
+
+</head>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        width: 14%;
+        height: 50px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .marked {
+        background: red;
+        color: white;
+    }
+
+    .selected {
+        background: blue;
+        color: white;
+    }
+
+    .action-table {
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        padding: 5px;
+        border: 1px solid black;
+    }
+
+    #calendar-body td:hover {
+        background-color: lightblue;
+    }
+
+    #month-year {
+        font-size: 1.2rem;
+    }
+
+    td {
+        height: 50px;
+        vertical-align: middle;
+    }
+
+    td.marked {
+        background-color: #e30e0e;
+        /* Màu vàng nhạt */
+        color: #fff;
+        /* Chữ trắng */
+        font-weight: bold;
+    }
+
+    .form-group>div {
+        flex: 1;
+    }
+
+    .form-group>div:first-child {
+        margin-right: 10px;
+    }
+
+    #table-action-note-book>thead th {
+        position: sticky;
+        /* Cố định tiêu đề */
+        top: 0;
+        /* Đặt ở đầu bảng */
+        background: #f1f1f1;
+        z-index: 500;
+        /* Đảm bảo nằm trên các hàng */
+    }
+
+    #table-action-note-book>tbody td:last-child,
+    thead th:last-child {
+        position: sticky;
+        right: 0;
+        /* Cố định cột cuối khi cuộn ngang */
+        background-color: #f9f9f9;
+        /* Màu nền để dễ nhận diện */
+        z-index: 1;
+    }
+
+    #table-action-note-book>tbody td:first-child {
+        position: sticky;
+        left:  0;
+        /* Cố định cột cuối khi cuộn ngang */
+        background-color: #f9f9f9;
+        /* Màu nền để dễ nhận diện */
+        z-index: 2;
+    }
+
+    #table-action-note-book>thead th:first-child {
+        position: sticky;
+        left:  0;
+        /* Cố định cột cuối khi cuộn ngang */
+        background-color: #f9f9f9;
+        /* Màu nền để dễ nhận diện */
+        z-index: 500;
+    }
+
+
+    #table-action-note-book>tbody td:nth-last-child(2),
+    thead th:nth-last-child(2) {
+        position: sticky;
+        right: 150px;
+        /* Điều chỉnh đúng kích thước cột cuối cùng */
+        background-color: #f9f9f9;
+        z-index: 4;
+    }
+
+
+    .table-scoll {
+        max-height: 400px;
+        /* Giới hạn chiều cao */
+        overflow-y: auto;
+        /* Kích hoạt thanh cuộn dọc */
+        overflow-x: auto;
+    }
+</style>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div th:replace="~{/share/menu-left :: nav-left}">
+        </div>
+        <div class="content">
+            <nav th:replace="~{/share/header-top :: header-top}"></nav>
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4" style="padding-bottom: 10px;">
+                    <form  method="get" action="/" class="row g-4" id="form-action">
+                    <div class="col-4 col-md-4">
+                        <div class="form-group">
+                            <label for="categorytimeLine" class="font-weight-bold">Chọn thời gian</label>
+                            <select id="categorytimeLine" class="form-control" name="timeLine">
+
+                                <th:block th:each="item :${timeLine}">
+                                    <option th:value="${item.id}" th:text="${item.nameTimeLine}">
+                                    </option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-4 col-md-4">
+                        <div class="form-group">
+                            <label for="categoryUser" class="font-weight-bold">Chọn giáo viên</label>
+                            <select id="categoryUser" class="form-control" name="giaovien">
+
+                                <th:block th:each="item :${users}">
+                                    <option th:value="${item.id}" th:text="${item.fullName}">
+                                    </option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="listData" id="data-update-status">
+
+                    <div class="col-12 col-md-12 d-flex justify-content-center">
+                        <div class="form-group" style="margin-right: 10px;">
+                            <button type="submit" class="btn btn-success" formaction="/danh-sach"  formmethod="get"> Tìm kiếm</button>
+                        </div>
+                        <div class="form-group">
+                            <!-- formaction -->
+                            <button type="submit" class="btn btn-success" id="btn-check-teach" formaction="/cap-nhat-trang-thai" formmethod="post"> Đã dạy</button>
+                            <!--  -->
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <div class="form-group d-flex  justify-content-between">
+                        <h6 class="mb-4" style="color: black;">Kết quả ký sổ</h6>
+                    </div>
+                    <div class="table-responsive table-scoll" style="overflow-x:auto">
+                        <table class="table action-table" id="table-action-note-book">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th style="min-width: 50px;"><input class="form-check-input" type="checkbox" id="check-box-all"></td>
+                                    <th style="display: none;"> isTrain</th>
+                                    <th style="display: none;"> id notebook</th>
+                                    <th style="display: none;"> id timeSheet</th>
+                                    <th>Thứ</th>
+                                    <th style="min-width: 200px;">Tiết dạy</th>
+                                    <th style="min-width: 100px;">Lớp</th>
+                                    <th style="min-width: 200px;">Nơi dạy</th>
+                                    <th style="min-width: 200px;">Môn học</th>
+                                    <th style="min-width: 250px;">Giáo viên</th>
+                                    <th style="min-width: 300px;">Tên bài giảng</th>
+                                    <th style="min-width: 100px;">Số học sinh lỗi</th>
+                                    <th style="min-width: 400px;">Chi tiết lỗi</th>
+                                    <th style="min-width: 400px;">Nhận xét chung</th>
+                                    <th style="min-width: 100px;">Điểm đánh giá</th>
+                                    <th style="min-width: 150px;">Trạng thái</th>
+                                    <th style="min-width: 150px;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="action-table-body" style="text-align: center">
+                                <tr th:each="p,index : ${list}">
+                                    <td><input class="form-check-input" type="checkbox" th:value="${p.isTrain}"
+                                            th:checked="${p.isTrain}"  th:disabled="${p.isTrain==true} ? 'disabled' : null"></td>
+                                    <td th:text="${p.isTrain}" style="display: none;"></td>
+                                    <td th:text="${p.noteBookId}" style="display: none;"></td>
+                                    <td th:text="${p.id}" style="display: none;"></td>
+                                    <td th:text="${p.thu}"></td>
+                                    <td th:text="${p.categoryPeriodName}"></td>
+                                    <td th:text="${p.categoryClassName}"></td>
+                                    <td th:text="${p.categoryRoomName}"></td>
+                                    <td th:text="${p.categorySubjectName}"></td>
+                                    <td th:text="${p.userFullName}"></td>
+                                    <td th:text="${p.lessonTopic}"></td>
+                                    <td th:text="${p.studentErrorCount}"></td>
+                                    <td th:text="${p.detailErrorStudent}"></td>
+                                    <td th:text="${p.generalComment}"></td>
+                                    <td th:text="${p.lessonEvaluation}"></td>
+                                    <td th:text="${p.isTrain != null && p.isTrain == true ? 'Đã dạy' : 'Chưa dạy'}">
+                                    </td>
+                                    <td>
+                                        <div class="d-inline">
+                                            <button th:onclick="Edit('[[${p.noteBookId}]]')" class="btn btn-success">Sửa</button>
+                                            <button  th:onclick="Delete([[${p.noteBookId}]])" class="btn btn-danger" data-toggle="modal">Xóa</button>
+                                           
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+    
+</body>
+<script th:src="@{/js/note-book/list.js}">
+</script>
+
+<th:block th:replace="~{/share/footer :: footer}"></th:block>
+
+</html>

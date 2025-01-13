@@ -18,6 +18,7 @@ import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.entity.TimeSheet;
 import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.request.CheckNoonRequest;
+import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.repository.TimeSheetRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -132,4 +133,46 @@ public class TimeSheetServiceImpl implements TimeSheetService {
 
         }
     }
+
+    @Override
+    public List<TimeSheet> findByTimeLineId(String timLineId) {
+        return timeSheetRepository.findByTimeLineId(timLineId);
+    }
+
+    @Override
+    public List<TimeSheet> findByUserIdTimeLineId(String userId, String timLineId) {
+        return timeSheetRepository.findByUserIdAndTimeLineId(userId, timLineId);
+    }
+
+    @Override
+    public List<TimeSheetResponsive> findTimeSheetByIdTimeLine(String id) {
+        return timeSheetRepository.findTimeSheetByIdTimeLine(id);
+    }
+
+    @Override
+    public List<TimeSheetResponsive> findTimeSheetByIdTimeLineAndUserIdTeach(String timLineId, String userId) {
+        return timeSheetRepository.findTimeSheetByIdTimeLineAndUserIdTeach(timLineId, userId);
+    }
+
+    @Override
+    public List<TimeSheetResponsive> findTimeSheetByIdTimeLineWithNoteBook(String timLineId) {
+        return timeSheetRepository.findTimeSheetByIdTimeLineWithNoteBook(timLineId);
+    }
+
+    @Override
+    public List<TimeSheetResponsive> findTimeSheetByIdTimeLineAndUserIdTeachWithNoteBook(String timLineId,
+            String userid) {
+        return timeSheetRepository.findTimeSheetByIdTimeLineAndUserIdTeachWithNoteBook(timLineId, userid);
+    }
+
+    @Override
+    public List<TimeSheetResponsive> findTimeSheetByUserIdTeachWithNoteBook(String userId) {
+        return timeSheetRepository.findTimeSheetByUserIdTeachWithNoteBook(userId);
+    }
+
+    @Override
+    public List<TimeSheetResponsive> findTimeSheetWithNoteBook() {
+        return timeSheetRepository.findTimeSheetWithNoteBook();
+    }
+
 }

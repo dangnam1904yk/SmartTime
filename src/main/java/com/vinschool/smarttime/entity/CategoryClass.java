@@ -3,10 +3,13 @@ package com.vinschool.smarttime.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -22,5 +25,7 @@ public class CategoryClass {
     boolean isActive;
 
     @OneToMany(mappedBy = "categoryClass", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonIgnore
     List<TimeSheet> timeSheet;
 }

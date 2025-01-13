@@ -17,7 +17,7 @@ public class TimLineServiceImpl implements TimeLineService {
 
     @Override
     public TimeLine save(TimeLine timeLine) {
-       return lineRepository.save(timeLine);
+        return lineRepository.save(timeLine);
     }
 
     @Override
@@ -33,6 +33,11 @@ public class TimLineServiceImpl implements TimeLineService {
     @Override
     public List<TimeLine> getAll() {
         return lineRepository.findAll();
+    }
+
+    @Override
+    public List<TimeLine> findByType(int type) {
+        return lineRepository.findByType(type);
     }
 
 }

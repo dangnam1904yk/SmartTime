@@ -1,6 +1,9 @@
 package com.vinschool.smarttime.repository;
 
 import com.vinschool.smarttime.entity.User;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User findByEmailAndPassword(String email, String password);
 
+    List<User> findByRoleCodeRole(String code);
 }

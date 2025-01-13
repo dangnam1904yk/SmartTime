@@ -3,12 +3,14 @@ package com.vinschool.smarttime.entity;
 import java.time.LocalDate;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ColumnResult;
 import jakarta.persistence.ConstructorResult;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,7 +49,8 @@ public class CheckNoon {
     String updateBy;
     Date updateDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_time_line")
+    @JsonBackReference
     private TimeLine timeLine;
 }

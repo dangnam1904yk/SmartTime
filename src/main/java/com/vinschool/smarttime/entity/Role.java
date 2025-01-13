@@ -7,6 +7,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
@@ -20,5 +22,6 @@ public class Role {
     String codeRole;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonIgnore
     List<User> users;
 }

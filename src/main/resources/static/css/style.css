@@ -291,3 +291,64 @@
 .color-text-black{
     color: #000;
 }
+
+/* Tùy chỉnh độ rộng và chiều cao của popup */
+.swal-popup {
+    width: 600px !important; /* Tăng độ rộng */
+    height: auto;           /* Chiều cao tự động */
+  }
+  
+  /* Tùy chỉnh kích thước phông chữ tiêu đề */
+  .swal-title {
+    font-size: 20px !important; /* Kích thước lớn hơn */
+    font-weight: bold;
+    color: #ff5733; /* Tùy chỉnh màu sắc */
+  }
+  
+  /* Tùy chỉnh phông chữ cho nội dung */
+  .swal-text {
+    font-size: 16px !important;
+  }
+  
+  /* Tùy chỉnh nút xác nhận */
+  .swal-confirm-btn {
+    font-size: 16px !important;
+    padding: 10px 20px;
+  }
+
+  /* Tùy chỉnh kích thước icon warning */
+.swal2-icon.swal2-warning {
+    font-size: 30px; /* Tăng kích thước */
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Tùy chỉnh kích thước icon success */
+  .swal2-icon.swal2-success {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Tùy chỉnh kích thước icon info */
+  .swal2-icon.swal2-info {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Tùy chỉnh kích thước icon error */
+  .swal2-icon.swal2-error {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .swal2-icon.swal2-warning.swal2-icon-show{
+    font-size: 16px;
+  }
+  .swal2-icon-content {
+    font-size: 30px !important;
+  }
+  
+  

@@ -74,4 +74,9 @@ public class UserServiceIImpl implements UserService {
     public User checkLogin(String email, String password) {
         return repository.findByEmailAndPassword(email, password);
     }
+
+    @Override
+    public List<User> findUserByCodeRole(String codeRole) {
+        return repository.findByRoleCodeRole(codeRole);
+    }
 }

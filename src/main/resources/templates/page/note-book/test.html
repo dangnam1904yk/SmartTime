@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Column</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed; /* Đảm bảo các cột có kích thước cố định */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap; /* Ngăn nội dung bị xuống dòng */
+        }
+        thead th {
+            position: sticky;
+            top: 0; /* Cố định hàng đầu khi cuộn dọc */
+            background-color: #f2f2f2;
+            z-index: 2; /* Đảm bảo hàng đầu hiển thị phía trên */
+        }
+        tbody td:first-child, thead th:first-child {
+            position: sticky;
+            left: 0; /* Cố định cột đầu tiên khi cuộn ngang */
+            background-color: #a74141; /* Màu nền để dễ nhận diện */
+            z-index: 1; /* Đảm bảo cột đầu tiên hiển thị phía trên */
+        }
+    </style>
+</head>
+<body>
+    <div style="overflow: auto; max-height: 300px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td><td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td><td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td>34</td>
+                    <td>456 Elm Street</td>
+                    <td>+1 555-5556</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td><td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Mike Brown</td>
+                    <td>25</td>
+                    <td>789 Oak Avenue</td>
+                    <td>+1 555-5557</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td><td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    <td>+1 555-5555</td><td>28</td>
+                    <td>123 Main Street</td>
+                    <td>+1 555-5555</td>
+                    
+                </tr>
+                <!-- Thêm nhiều dữ liệu nếu cần -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

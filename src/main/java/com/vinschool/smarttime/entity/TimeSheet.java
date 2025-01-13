@@ -3,10 +3,15 @@ package com.vinschool.smarttime.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @Entity
@@ -23,31 +28,45 @@ public class TimeSheet {
     String updateBy;
     String nameTimeSheet;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_class_id", referencedColumnName = "id")
+    @ToString.Exclude
+    @JsonBackReference
     CategoryClass categoryClass;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_period_id", referencedColumnName = "id")
-    private CategoryPeriod categoryPeriod;
+    @ToString.Exclude
+    @JsonBackReference
+    CategoryPeriod categoryPeriod;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_subject_id", referencedColumnName = "id")
+    @ToString.Exclude
+    @JsonBackReference
     private CategorySubject categorySubject;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_room_id", referencedColumnName = "id")
+    @ToString.Exclude
+    @JsonBackReference
     private CategoryRoom categoryRoom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ToString.Exclude
+    @JsonBackReference
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_time_line")
+    @ToString.Exclude
+    @JsonBackReference
     TimeLine timeLine;
 
-    @OneToMany(mappedBy = "timeSheet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "timeSheet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JsonManagedReference
     List<NoteBook> noteBook;
 
 }

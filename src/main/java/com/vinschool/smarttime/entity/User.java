@@ -3,10 +3,14 @@ package com.vinschool.smarttime.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -17,6 +21,7 @@ public class User {
     @Column(length = 50)
     String id;
     String fullName;
+    @JsonIgnore
     String password;
     @Column(length = 10)
     String phone;
@@ -28,9 +33,12 @@ public class User {
     Date createDate;
     Date updateDate;
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @JsonIgnore
     List<Role> role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonManagedReference
     List<TimeSheet> timeSheet;
 
 }

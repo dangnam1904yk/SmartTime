@@ -207,6 +207,14 @@
         }
     });
 
-    
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            alert("Thông báo đã được kích hoạt!");
+        } else {
+            alert("Bạn đã từ chối thông báo.");
+        }
+    });
 })(jQuery);
+
+
 

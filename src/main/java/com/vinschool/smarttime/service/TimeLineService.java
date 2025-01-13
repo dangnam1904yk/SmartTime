@@ -12,4 +12,6 @@ public interface TimeLineService {
     List<TimeLine> getAll();
 
     TimeLine Detail(String id);
+
+    List<TimeLine> findByType(int type);
 }
