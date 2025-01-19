@@ -45,7 +45,5 @@ public class NoteBook {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_time_sheet")
-    @ToString.Exclude
-    @JsonBackReference
     TimeSheet timeSheet;
 }

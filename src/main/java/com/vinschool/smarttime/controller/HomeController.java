@@ -1,6 +1,10 @@
 package com.vinschool.smarttime.controller;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,9 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.vinschool.smarttime.entity.DetailNotification;
+import com.vinschool.smarttime.entity.Notification;
 import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
+import com.vinschool.smarttime.repository.DetailNotificationRepository;
+import com.vinschool.smarttime.repository.NotificationRepository;
 import com.vinschool.smarttime.service.RoleService;
+import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.service.UserService;
+import com.vinschool.smarttime.ulti.Constant;
 import com.vinschool.smarttime.ulti.HashPassword;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +37,15 @@ public class HomeController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private TimeSheetService timeSheetService;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private DetailNotificationRepository detailNotificationRepository;
 
     @GetMapping("/")
     public String Index(Model model, HttpServletRequest request) {
@@ -67,12 +87,6 @@ public class HomeController {
             @RequestParam("password") String password,
             HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String a = "1";
-        System.out.println(HashPassword.hashPass(a));
-
-        System.out.println(HashPassword.checkPass(a, HashPassword.hashPass(a)));
-        String b = "1";
-        System.out.println(HashPassword.checkPass(b, HashPassword.hashPass(b)));
 
         User user = userService.finByEmail(email);
         if (user == null) {

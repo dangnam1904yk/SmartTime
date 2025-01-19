@@ -1,5 +1,6 @@
 package com.vinschool.smarttime.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +31,13 @@ public class TimeLine {
     boolean isActive;
     int type;
     String nameTimeLine;
+    LocalDate startDate;
+    LocalDate endDate;
+    int calendarType;
+
     @OneToMany(mappedBy = "timeLine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<CheckNoon> checkNoon;
 
     @OneToMany(mappedBy = "timeLine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<TimeSheet> timeSheet;
 }

@@ -84,3 +84,7 @@ function Delete(id){
       });
       
 }
+
+function Edit(value){
+    window.location.href="/ky-so-dau-bai/edit/"+value;
+}

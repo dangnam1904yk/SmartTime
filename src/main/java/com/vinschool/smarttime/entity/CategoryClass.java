@@ -25,7 +25,5 @@ public class CategoryClass {
     boolean isActive;
 
     @OneToMany(mappedBy = "categoryClass", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @JsonIgnore
     List<TimeSheet> timeSheet;
 }

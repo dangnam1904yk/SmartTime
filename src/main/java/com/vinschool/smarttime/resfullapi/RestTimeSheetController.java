@@ -37,8 +37,11 @@ public class RestTimeSheetController {
             return null;
         List<TimeSheetResponsive> result = new ArrayList<>();
         if (user.getEmail().startsWith("admin")) {
+
             result = timeSheetService.findTimeSheetByIdTimeLine(param);
+
         } else {
+
             result = timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeach(param, user.getId());
         }
         return result;

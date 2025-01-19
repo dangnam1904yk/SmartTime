@@ -3,6 +3,7 @@ package com.vinschool.smarttime.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
@@ -33,12 +34,18 @@ public class User {
     Date createDate;
     Date updateDate;
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    @JsonIgnore
     List<Role> role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
-    @JsonManagedReference
     List<TimeSheet> timeSheet;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    List<DetailNotification> detailNotifications;
+
+    @OneToOne
+    AccountSchedule accountSchedules;
 
 }

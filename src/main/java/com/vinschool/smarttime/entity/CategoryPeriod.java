@@ -34,8 +34,9 @@ public class CategoryPeriod {
     boolean isAcitve;
     Date createDate;
     Date updateDate;
+    String hourStart;
+    String hourEnd;
+
     @OneToMany(mappedBy = "categoryPeriod", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @JsonManagedReference
     List<TimeSheet> timeSheet;
 }

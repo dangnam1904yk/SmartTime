@@ -1,10 +1,12 @@
 package com.vinschool.smarttime.service;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,6 +20,7 @@ import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.entity.TimeSheet;
 import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.request.CheckNoonRequest;
+import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.repository.TimeSheetRepository;
 
@@ -91,7 +94,30 @@ public class TimeSheetServiceImpl implements TimeSheetService {
 
                 timeLineDb.setActive(
                         map.get("isActive") != null ? map.get("isActive").toString() == "true" ? true : false : false);
-                timeLineDb.setMonth(map.get("month").toString());
+                if (map.get("calendarType").toString().equals("1")) {
+                    // 2025-W04
+                    if (map.get("weekStart") != null) {
+                        String[] split = map.get("weekStart").toString().split("-W");
+                        LocalDate firstDayOfYear = LocalDate.of(Integer.parseInt(split[0]), 1, 1);
+
+                        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+
+                        LocalDate startOfWeek = firstDayOfYear
+                                .with(weekFields.weekOfYear(), Integer.parseInt(split[1])) // Đặt tuần
+                                .with(weekFields.dayOfWeek(), 1); // Đặt ngày đầu tuần (thứ Hai)
+                        LocalDate endOfWeek = startOfWeek.plusDays(6);
+                        timeLineDb.setStartDate(startOfWeek);
+                        timeLineDb.setEndDate(endOfWeek);
+
+                    }
+                    timeLineDb.setCalendarType(Integer.parseInt(map.get("calendarType").toString()));
+                }
+                if (map.get("moth") != null) {
+                    timeLineDb.setMonth(map.get("month").toString());
+                }
+                if (map.get("nameTimeLine") != null) {
+                    timeLineDb.setNameTimeLine(map.get("nameTimeLine").toString());
+                }
                 TimeLine timeLineSave = timeLineService.save(timeLineDb);
 
                 dataList = objectMapper.readValue(dataTimeSheet, new TypeReference<>() {
@@ -109,19 +135,19 @@ public class TimeSheetServiceImpl implements TimeSheetService {
                     timSheet.setThu(item.get("thu").toString());
                     timSheet.setCreateBy(user.getId());
                     timSheet.setCreateDate(new Date());
-                    timSheet.setUser(userService.findById(item.get("user_id").toString()));
-                    timSheet.setCategoryClass(categoryClassService.getById(item.get("category_class_id").toString()));
-                    timSheet.setCategoryPeriod(categoryPeriodService.detail(item.get("category_period_id").toString()));
+                    timSheet.setUser(userService.findById(item.get("useId").toString()));
+                    timSheet.setCategoryClass(categoryClassService.getById(item.get("categoryClassId").toString()));
+                    timSheet.setCategoryPeriod(categoryPeriodService.detail(item.get("categoryPeriodId").toString()));
                     timSheet.setCategorySubject(
-                            categorySubjectService.detail(item.get("category_subject_id").toString()));
-                    timSheet.setCategoryRoom(categoryRoomSerive.detail(item.get("category_room_id").toString()));
+                            categorySubjectService.detail(item.get("categorySubjectId").toString()));
+                    timSheet.setCategoryRoom(categoryRoomSerive.detail(item.get("categoryRoomId").toString()));
                     timSheet.setNameTimeSheet(item.get("nameTimeSheet").toString());
                     timSheet.setTimeLine(timeLineSave);
                     list.add(timSheet);
                 }
 
                 timeLineDb.setId(timeLineSave.getId());
-                timeLineDb.setTimeSheet(list);
+                // timeLineDb.setTimeSheet(list);
                 timeSheetRepository.saveAll(list);
             } catch (JsonMappingException e) {
 
@@ -175,4 +201,29 @@ public class TimeSheetServiceImpl implements TimeSheetService {
         return timeSheetRepository.findTimeSheetWithNoteBook();
     }
 
+    @Override
+    public TimeSheetResponsive findNoteBookByIdWWithTimeSheet(String id) {
+        return timeSheetRepository.findNoteBookByIdWWithTimeSheet(id);
+    }
+
+    @Override
+    public List<TimeSheet> getAll() {
+        return timeSheetRepository.findAll();
+    }
+
+    @Override
+    public List<TimeSheetResponsive> getAllTimeSheetResponsive() {
+        return timeSheetRepository.getAllTimeSheetResponsive();
+    }
+
+    @Override
+    public List<TimeSheetResponsive> getTimeSheetResponsiveByUserIdTeach(String id) {
+        return timeSheetRepository.getTimeSheetResponsiveByUserIdTeach(id);
+    }
+
+    @Override
+    public List<TimeSheetChekNotification> CheckSoDauBai(LocalDate dateCheck, Boolean isActive, Boolean isTrain,
+            String thu) {
+        return timeSheetRepository.CheckSoDauBai(dateCheck, isActive, isTrain, thu);
+    }
 }

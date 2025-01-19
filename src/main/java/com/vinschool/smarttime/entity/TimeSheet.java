@@ -31,42 +31,34 @@ public class TimeSheet {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_class_id", referencedColumnName = "id")
     @ToString.Exclude
-    @JsonBackReference
     CategoryClass categoryClass;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_period_id", referencedColumnName = "id")
     @ToString.Exclude
-    @JsonBackReference
     CategoryPeriod categoryPeriod;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_subject_id", referencedColumnName = "id")
     @ToString.Exclude
-    @JsonBackReference
     private CategorySubject categorySubject;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_room_id", referencedColumnName = "id")
     @ToString.Exclude
-    @JsonBackReference
     private CategoryRoom categoryRoom;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ToString.Exclude
-    @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_time_line")
     @ToString.Exclude
-    @JsonBackReference
     TimeLine timeLine;
 
     @OneToMany(mappedBy = "timeSheet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @JsonManagedReference
     List<NoteBook> noteBook;
 
 }

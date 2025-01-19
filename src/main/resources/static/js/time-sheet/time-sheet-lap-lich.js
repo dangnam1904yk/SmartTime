@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const dataInput = document.getElementById("dataInput");
     const timeLine = document.getElementById("timeLine");
     const nameTimeSheet = document.getElementById("nameTimeSheet");
+    const weekStart = document.getElementById("weekStart");
+    const calendarType = document.getElementById("calendarType");
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+    
+
 
     const now = new Date();
     const year = now.getFullYear();
@@ -21,8 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Đặt giá trị mặc định cho input
     const inputMonth = document.getElementById('thangPhanCong');
-      inputMonth.value = `${year}-${month}`;
-
 
     const listTimeSheet = [];
 
@@ -36,6 +40,48 @@ document.addEventListener("DOMContentLoaded", function () {
     categoryUser.addEventListener("change", function () {
         labelUser = categoryUser.options[categoryUser.selectedIndex].text;
     });
+
+    weekStart.addEventListener("change", function () {
+        console.log(weekStart.value);
+        
+        if(weekStart.value ==""){
+            weekStart.nextElementSibling.textContent = "Không được bỏ trống";
+        }else{
+            weekStart.nextElementSibling.textContent = "";   
+        }
+    });
+
+    if(calendarType.value ==1){
+        startDate.parentElement.parentElement.style.display ="none";
+        endDate.parentElement.parentElement.style.display="none";
+        weekStart.parentElement.parentElement.style.display="";
+    }else{
+        startDate.parentElement.parentElement.style.display ="";
+        endDate.parentElement.parentElement.style.display="";
+        weekStart.parentElement.parentElement.style.display="none";
+
+    }
+
+    calendarType.addEventListener("change", function () {
+        if(calendarType.value ==1){
+            startDate.parentElement.parentElement.style.display ="none";
+            endDate.parentElement.parentElement.style.display="none";
+            weekStart.parentElement.parentElement.style.display="";
+        }else{
+            startDate.parentElement.parentElement.style.display ="";
+            endDate.parentElement.parentElement.style.display="";
+            weekStart.parentElement.parentElement.style.display="none";
+
+        }
+    });
+
+nameTimeSheet.addEventListener("change", function(){
+    if(nameTimeSheet.value ==""){
+        nameTimeSheet.nextElementSibling.textContent = "Không được bỏ trống";
+    }else{
+        nameTimeSheet.nextElementSibling.textContent = "";
+    }
+})
 
     categorySubject.addEventListener("change", function () {
         labelSubject = categorySubject.options[categorySubject.selectedIndex].text;
@@ -56,6 +102,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     bnt_add.addEventListener("click", function () {
+        if(calendarType.value =="1") {            
+            if(weekStart.value ==""){
+                weekStart.nextElementSibling.textContent = "Không được bỏ trống";
+                return
+            }else{
+                weekStart.nextElementSibling.textContent = "";   
+            }
+        }
+
+        if(nameTimeSheet.value ==""){
+            nameTimeSheet.nextElementSibling.textContent = "Không được bỏ trống";
+            return;
+        }else{
+            nameTimeSheet.nextElementSibling.textContent = "";
+        }
         const data = {
             uid: GenerectUUID(),
             id: null,
@@ -74,6 +135,24 @@ document.addEventListener("DOMContentLoaded", function () {
             "nameTimeSheet": nameTimeSheet.value
         }
         console.log(data);
+
+        
+        const index = listTimeSheet.findIndex(item => item.thu === data.thu && item.category_period_id === data.category_period_id) ;
+
+            if (index !== -1) {
+                Swal.fire({
+                    title: "Trùng tiết đã phân công",
+                    text: "",
+                    icon: "warning" || 'info', // Các giá trị icon: 'success', 'error', 'warning', 'info', 'question'
+                    timer: 5000, // Tự động đóng sau 5 giây
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    position: 'top-end', // Đặt vị trí thông báo
+                    toast: true, // Hiển thị dạng "toast"
+    
+                });
+                return;
+            }
         
         listTimeSheet.push(data)
         addRowToTable(data);
@@ -94,10 +173,10 @@ document.addEventListener("DOMContentLoaded", function () {
         button.textContent = 'Xóa';
         button.classList.add('remove-btn');
         cell3.appendChild(button);
-        const cell4 = document.createElement('td');
-        cell4.textContent = data.labelPeriod;
         const cell5 = document.createElement('td');
-        cell5.textContent = data.labelThu;
+        cell5.textContent = data.labelPeriod;
+        const cell4 = document.createElement('td');
+        cell4.textContent = data.labelThu;
         const cell6 = document.createElement('td');
         cell6.textContent = data.labelClass;
         const cell7 = document.createElement('td');
@@ -140,20 +219,18 @@ document.addEventListener("DOMContentLoaded", function () {
     submitDataButton.addEventListener("click", function () {
 
         dataInput.value = JSON.stringify(listTimeSheet); // Gắn JSON vào input hidden
-        const dataTimeLine = { isActive: isActive.checked, month: inputMonth.value }
+        const dataTimeLine = { isActive: isActive.checked,
+                               "calendarType": calendarType.value, 
+                               "weekStart": weekStart.value,
+                               "startDate": startDate.value,
+                               "endDate" : endDate.value,
+                               "nameTimeLine": nameTimeSheet.value
+                            }
         timeLine.value = JSON.stringify(dataTimeLine);
         selectedDataForm.submit(); // Gửi form
 
     });
     
-   
-        // Notification.requestPermission().then(permission => {
-        //     if (permission === "granted") {
-        //         alert("Thông báo đã được kích hoạt!");
-        //     } else {
-        //         alert("Bạn đã từ chối thông báo.");
-        //     }
-        // });
 
     function GenerectUUID() {
         const list = ['A', 'b', 'c', '3', '6', 'D', 'e', '8', 'F', '9', 'T', '0'];

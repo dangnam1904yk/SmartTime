@@ -51,6 +51,5 @@ public class CheckNoon {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_time_line")
-    @JsonBackReference
     private TimeLine timeLine;
 }

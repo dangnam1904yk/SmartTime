@@ -19,17 +19,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const isTrain = document.getElementById("isTrain");
     const categoryTimeSheet = document.getElementById("categoryTimeSheet");
 
+    const SO_DAU_BAI = 1;
     let listTimeSheet = [];
-    let listSoDauBai =[];
+    let listSoDauBai = [];
+    let listTimeLine = [];
+    let uidEdit = "";
 
     categorytimeLine.addEventListener("change", function () {
         console.log(categorytimeLine.value);
+        categoryTimeSheet.innerHTML = "";
         $.ajax({
             url: `/api/timeSheet/getTimeSheetByTimeLine?id=${categorytimeLine.value}`,
             method: 'GET',
             async: true, // Chờ phản hồi trước khi tiếp tục
             success: function (response) {
                 console.log(response);
+                actionTableBody.innerHTML = "";
                 if (response.length > 0) {
                     listTimeSheet = response;
                     for (let index = 0; index < response.length; index++) {
@@ -45,12 +50,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error('Error:', error);
             }
         });
+
+
     });
 
     $.ajax({
         url: `/api/timeSheet/getTimeSheetByTimeLine?id=${categorytimeLine.value}`,
         method: 'GET',
-        async: false, // Chờ phản hồi trước khi tiếp tục
+        async: true, // Chờ phản hồi trước khi tiếp tục
         success: function (response) {
             console.log(response);
             if (response.length > 0) {
@@ -62,14 +69,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     newOption.textContent = mapperThuNgay(element.thu) + " - " + element.categoryPeriodName;
                     categoryTimeSheet.appendChild(newOption);
-
                 }
+
+                showDataByTimeSheetId(response[0].id);
             }
         },
         error: function (error) {
             console.error('Error:', error);
         }
     });
+
+
+    $.ajax({
+        url: `/api/timeLine/get-by-type?type=${SO_DAU_BAI}`,
+        method: 'GET',
+        async: true, // Chờ phản hồi trước khi tiếp tục
+        success: function (response) {
+            console.log(response);
+            if (response.length > 0) {
+                listTimeLine = response;
+
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error);
+        }
+    });
+
 
     function mapperThuNgay(input) {
         var labelContent = "";
@@ -106,29 +132,81 @@ document.addEventListener("DOMContentLoaded", function () {
         showDataByTimeSheetId(categoryTimeSheet.value);
     })
 
+    lessonTopic.addEventListener("change", function () {
+        if (lessonTopic.value == "") {
+            lessonTopic.nextElementSibling.textContent = "Không được bỏ trống";
+        } else {
+            lessonTopic.nextElementSibling.textContent = "";
+        }
+    })
+
+    lessonEvaluation.addEventListener("change", function () {
+        if (lessonEvaluation.value == "") {
+            lessonEvaluation.nextElementSibling.textContent = "Không được bỏ trống";
+        } else {
+            lessonEvaluation.nextElementSibling.textContent = "";
+        }
+        if(lessonEvaluation.value <0 || lessonEvaluation.value >10){
+            lessonEvaluation.nextElementSibling.textContent ="Chỉ nhập điểm từ 0 - 10";
+        }else{
+            lessonEvaluation.nextElementSibling.textContent = "";
+        }
+    })
+
+    studentErrorCount.addEventListener("change", function(){
+        if(studentErrorCount.value <0 ){
+            studentErrorCount.nextElementSibling.textContent ="Chỉ được phép nhập số nguyên dương"
+        }
+        if(studentErrorCount.value.includes(",") || studentErrorCount.value.includes(".") ){
+            studentErrorCount.nextElementSibling.textContent ="Chỉ được phép nhập số nguyên dương"
+        }else{
+            studentErrorCount.nextElementSibling.textContent ="";
+        }
+    })
+
+
     function showDataByTimeSheetId(id) {
         var result = listTimeSheet.filter(item => item.id == id);
-        console.log(result);
-        if(result.length>0){
+        if (result.length > 0) {
             addRowToTableView(result[0]);
         }
-    
+
     }
 
 
     bnt_add.addEventListener("click", function () {
         var result = listTimeSheet.filter(item => item.id == categoryTimeSheet.value);
-         var timeSheet = result[0]
-       
+
+        var timeSheet = result[0]
+        if (lessonTopic.value == "") {
+            lessonTopic.nextElementSibling.textContent = "Không được bỏ trống";
+            return;
+        }
+        if(studentErrorCount.value <0 ){
+            studentErrorCount.nextElementSibling.textContent ="Chỉ được phép nhập số nguyên dương"
+            return;
+        }
+        
+        if (lessonEvaluation.value == "") {
+            lessonEvaluation.nextElementSibling.textContent = "Không được bỏ trống";
+            return;
+        }
+        if(lessonEvaluation.value <0 || lessonEvaluation.value >10){
+            lessonEvaluation.nextElementSibling.textContent ="Chỉ nhập điểm từ 0 - 10";
+            return;
+        }
+        if(lessonEvaluation.value.includes(",")){
+            lessonEvaluation.value = lessonEvaluation.value.replace(",", ".");
+        }
         const data = {
-            uid: GenerectUUID(),
-            id: null,
-            thu: timeSheet.thu,
-            category_class_id: timeSheet.categoryClassId,
-            category_period_id: timeSheet.categoryPeriodId,
-            category_subject_id: timeSheet.categorySubjectId,
-            category_room_id: timeSheet.categoryRoomId,
-            user_id: timeSheet.userId,
+            "uid": GenerectUUID(),
+            "id": null,
+            "thu": timeSheet.thu,
+            "categoryClassId": timeSheet.categoryClassId,
+            "categoryPeriodId": timeSheet.categoryPeriodId,
+            "categorySubjectId": timeSheet.categorySubjectId,
+            "categoryRoomId": timeSheet.categoryRoomId,
+            "userId": timeSheet.userId,
             "timeSheetId": timeSheet.id,
             "categoryClassName": timeSheet.categoryClassName,
             "categoryPeriodName": timeSheet.categoryPeriodName,
@@ -137,26 +215,61 @@ document.addEventListener("DOMContentLoaded", function () {
             "labelThu": mapperThuNgay(timeSheet.thu),
             "userFullName": timeSheet.userFullName,
             "lessonTopic": lessonTopic.value,
-            "studentErrorCount": studentErrorCount.value,
+            "studentErrorCount": parseInt(studentErrorCount.value),
             "detailErrorStudent": detailErrorStudent.value,
             "generalComment": generalComment.value,
             "lessonEvaluation": lessonEvaluation.value,
             "isTrain": isTrain.checked,
-            "daDay": isTrain.checked == true ? "X": ""
+            "daDay": isTrain.checked == true ? "X" : ""
         }
-        console.log(data);
 
-        listSoDauBai.push(data)
-        addRowToTable(data);
+        const index = listSoDauBai.findIndex(item => item.thu === data.thu && item.categoryPeriodId === data.categoryPeriodId && item.uid !== uidEdit);
+
+        if (index !== -1) {
+            Swal.fire({
+                title: "Trùng tiết",
+                text: "",
+                icon: "warning" || 'info', // Các giá trị icon: 'success', 'error', 'warning', 'info', 'question'
+                timer: 5000, // Tự động đóng sau 5 giây
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-end', // Đặt vị trí thông báo
+                toast: true, // Hiển thị dạng "toast"
+
+            });
+            return;
+        }
+        var tr_row = actionTableBody.querySelectorAll("tr");
+        if (uidEdit !== "") {
+            for (let index = 0; index < tr_row.length; index++) {
+                const element = tr_row[index];
+                if(element.childNodes[0].textContent === uidEdit){
+                    element.remove();
+                    break;
+                }
+            }
+        }
+
+        let dataIndex = listSoDauBai.findIndex((item => item.uid === uidEdit))
+        if (dataIndex !== -1) {
+            listSoDauBai.splice(dataIndex, 1);
+        }
+        listSoDauBai.unshift(data)
+        addRowToTable(data, "fisrt");
+        lessonTopic.value ="";
+        lessonEvaluation.value="";
+        studentErrorCount.value="";
+        generalComment.value="";
+        detailErrorStudent.value="";
     });
 
     function addRowToTableView(data) {
-        actionTableBodyView.innerHTML ="";
+        actionTableBodyView.innerHTML = "";
         const row = document.createElement("tr");
 
         // Tạo các ô dữ liệu cho hàng mới
         const cell4 = document.createElement('td');
-        cell4.textContent = mapperThuNgay(data.thu);
+        cell4.textContent = data.thu.length > 3 ? data.thu : mapperThuNgay(data.thu);
         const cell5 = document.createElement('td');
         cell5.textContent = data.categoryPeriodName;
         const cell6 = document.createElement('td');
@@ -167,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cell8.textContent = data.categorySubjectName;
         const cell9 = document.createElement('td');
         cell9.textContent = data.userFullName;
-        
+
         // Thêm các ô vào hàng
         row.appendChild(cell4);
         row.appendChild(cell5);
@@ -178,18 +291,18 @@ document.addEventListener("DOMContentLoaded", function () {
         actionTableBodyView.appendChild(row);
     }
 
-    function addRowToTable(data) {
-        actionTableBodyView.innerHTML ="";
+    function addRowToTable(data, positionAdd) {
+        actionTableBodyView.innerHTML = "";
         const row = document.createElement("tr");
 
         // Tạo các ô dữ liệu cho hàng mới
         const cell0 = document.createElement('td');
         cell0.textContent = data.uid;
-        cell0.style.display= "none";
+        cell0.style.display = "none";
         const cell00 = document.createElement('td');
         cell00.textContent = data.id;
-        cell00.style.display= "none";
-        
+        cell00.style.display = "none";
+
         const cell1 = document.createElement('td');
         cell1.textContent = mapperThuNgay(data.thu);
         const cell2 = document.createElement('td');
@@ -213,18 +326,34 @@ document.addEventListener("DOMContentLoaded", function () {
         const cell11 = document.createElement('td');
         cell11.textContent = data.lessonEvaluation;
         const cell12 = document.createElement('td');
-        cell12.textContent = data.daDay;
-        
+        cell12.textContent = data.isTrain === true ? "Đã dạy" : "Chưa dạy";
+
         const cell13 = document.createElement('td');
-        cell13.textContent = data.daDay;
-        const button = document.createElement('button');
-        button.textContent = 'Xóa';
-        button.classList.add('remove-btn');
-        cell13.appendChild(button);
+
+        const buttonDelete = document.createElement('button');
+        buttonDelete.textContent = 'Xóa';
+        buttonDelete.classList.add('btn');
+        buttonDelete.classList.add('btn-danger');
+        buttonDelete.classList.add('remove-btn');
+
+
+        const buttonEdit = document.createElement('button');
+        buttonEdit.textContent = 'Sửa';
+        buttonEdit.classList.add('edit-btn');
+        buttonEdit.classList.add('btn');
+        buttonEdit.classList.add('btn-success');
+        buttonEdit.style.marginRight = "10px";
+        cell13.appendChild(buttonEdit);
+        cell13.appendChild(buttonDelete);
+
+        const cell14 = document.createElement('td');
+        cell14.textContent = data.timeSheetId;
+        cell14.style.display = "none";
 
         // Thêm các ô vào hàng
         row.appendChild(cell0);
         row.appendChild(cell00);
+        row.appendChild(cell14);
         row.appendChild(cell1);
         row.appendChild(cell2);
         row.appendChild(cell3);
@@ -238,10 +367,14 @@ document.addEventListener("DOMContentLoaded", function () {
         row.appendChild(cell11);
         row.appendChild(cell12);
         row.appendChild(cell13);
-        
-        actionTableBody.appendChild(row);
+        if (positionAdd == "fisrt") {
 
-        button.addEventListener('click', function () {
+            actionTableBody.insertBefore(row, actionTableBody.firstChild);
+        } else {
+            actionTableBody.appendChild(row);
+        }
+
+        buttonDelete.addEventListener('click', function () {
             // Tìm hàng chứa nút được nhấn
             const row = this.closest('tr');
 
@@ -256,6 +389,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 row.remove();
             }
         });
+
+        buttonEdit.addEventListener('click', function () {
+            const row = this.closest('tr');
+
+            const cells = row.querySelectorAll('td');
+            console.log(cells);
+            uidEdit = cells[0].textContent;
+            categoryTimeSheet.value = cells[2].textContent;
+            lessonTopic.value = cells[9].textContent;
+            studentErrorCount.value = cells[10].textContent;
+            detailErrorStudent.value = cells[11].textContent;
+            generalComment.value = cells[12].textContent;
+            lessonEvaluation.value = cells[13].textContent;
+            cells[14].textContent === "Đã dạy" ? (isTrain.checked = true) : (isTrain.checked = false);
+
+            const dataadd = {
+                thu: cells[3].textContent,
+                categoryPeriodName: cells[4].textContent,
+                categoryClassName: cells[5].textContent,
+                categoryRoomName: cells[6].textContent,
+                categorySubjectName: cells[7].textContent,
+                userFullName: cells[8].textContent
+            }
+            addRowToTableView(dataadd)
+        });
     }
 
 
@@ -266,14 +424,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-
-    Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-            alert("Thông báo đã được kích hoạt!");
-        } else {
-            alert("Bạn đã từ chối thông báo.");
-        }
-    });
 
     function GenerectUUID() {
         const list = ['A', 'b', 'c', '3', '6', 'D', 'e', '8', 'F', '9', 'T', '0'];

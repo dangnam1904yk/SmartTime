@@ -32,8 +32,6 @@
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Tổng giáo viên</p>
-                                <h1>WebSocket Notifications</h1>
-                                <div id="notifications"></div>
                                 <h6 class="mb-0">1234</h6>
                             </div>
                         </div>
@@ -358,8 +356,8 @@
         // Lắng nghe topic /topic/notifications
         stompClient.subscribe('/topic/notifications', function (message) {
             const notificationsDiv = document.getElementById('notifications');
-            notificationsDiv.innerHTML += '<p>' + message.body + '</p>';
-            showBrowserNotification(message?.title, message.body, message?.icon);
+           // notificationsDiv.innerHTML += '<p>' + message.body + '</p>';
+            showBrowserNotification("Thông báo", message.body, message?.icon);
         });
     });
 

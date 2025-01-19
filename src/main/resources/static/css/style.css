@@ -351,4 +351,120 @@
     font-size: 30px !important;
   }
   
+  .span-error {
+    color: #EB1616;
+    font-size: 13px;
+  }
   
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    width: 14%;
+    height: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.action-table {
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 5px;
+    border: 1px solid black;
+}
+
+#calendar-body td:hover {
+    background-color: lightblue;
+}
+
+#month-year {
+    font-size: 1.2rem;
+}
+
+td {
+    height: 50px;
+    vertical-align: middle;
+}
+
+.form-group>div {
+    flex: 1;
+}
+
+.form-group>div:first-child {
+    margin-right: 10px;
+}
+
+#table-action-note-book>thead th {
+    position: sticky;
+    /* Cố định tiêu đề */
+    top: 0;
+    /* Đặt ở đầu bảng */
+    background: #f1f1f1;
+    z-index: 500;
+    /* Đảm bảo nằm trên các hàng */
+}
+
+#table-action-note-book>tbody td:last-child,
+thead th:last-child {
+    position: sticky;
+    right: 0;
+    /* Cố định cột cuối khi cuộn ngang */
+    background-color: #f9f9f9;
+    /* Màu nền để dễ nhận diện */
+    z-index: 1;
+}
+
+#table-action-note-book>tbody td:first-child {
+    position: sticky;
+    left:  0;
+    /* Cố định cột cuối khi cuộn ngang */
+    background-color: #f9f9f9;
+    /* Màu nền để dễ nhận diện */
+    z-index: 2;
+}
+
+#table-action-note-book>thead th:first-child {
+    position: sticky;
+    left:  0;
+    /* Cố định cột cuối khi cuộn ngang */
+    background-color: #f9f9f9;
+    /* Màu nền để dễ nhận diện */
+    z-index: 500;
+}
+
+
+#table-action-note-book>tbody td:nth-last-child(2),
+thead th:nth-last-child(2) {
+    position: sticky;
+    right: 150px;
+    /* Điều chỉnh đúng kích thước cột cuối cùng */
+    background-color: #f9f9f9;
+    z-index: 4;
+}
+
+
+.table-scoll {
+    max-height: 600px;
+    /* Giới hạn chiều cao */
+    overflow-y: auto;
+    /* Kích hoạt thanh cuộn dọc */
+    overflow-x: auto;
+}
+.no-margin-padding{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.no-margin {
+    margin: 0 !important; 
+}
+.no-padding{
+    padding: 0 !important;
+}

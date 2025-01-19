@@ -1,13 +1,17 @@
 package com.vinschool.smarttime.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vinschool.smarttime.entity.User;
@@ -42,13 +46,22 @@ public class NoteBookController {
     @GetMapping("/ky-so-dau-bai")
     public String FormKySo(Model model, HttpServletRequest request,
             @RequestParam(name = "thang-hieu-luc", required = false) String thangHieuLuc) {
-        model.addAttribute("timeLine", timeLineService.findByType(Constant.TYPE_TIME_LINE.SO_DAU_BAI));
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+        model.addAttribute("timeLine",
+                timeLineService.findByEndDateAfterAndType(LocalDate.now(), Constant.TYPE_TIME_LINE.SO_DAU_BAI));
         return "page/note-book/form";
     }
 
     @PostMapping("/ky-so-dau-bai")
     public String KySoDauBai(Model model, HttpServletRequest request,
             @RequestParam(name = "data") String listData) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
         noteBookService.saveNoteBookFromStringData(listData, request);
         return "page/note-book/form";
     }
@@ -65,26 +78,30 @@ public class NoteBookController {
         model.addAttribute("timeLine", timeLineService.findByType(Constant.TYPE_TIME_LINE.SO_DAU_BAI));
         model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
 
-        List<TimeSheetResponsive> list = timeSheetService.findTimeSheetWithNoteBook();
-        for (TimeSheetResponsive timeSheetResponsive : list) {
-            System.out.println(timeSheetResponsive.toString());
-        }
+        List<TimeSheetResponsive> list = new ArrayList<>();
         if (user.getEmail().startsWith("admin")) {
             if (timLineId == null || timLineId.isEmpty()) {
-                model.addAttribute("list", timeSheetService.findTimeSheetWithNoteBook());
+                list = timeSheetService.findTimeSheetWithNoteBook();
 
             } else {
-                model.addAttribute("list", timeSheetService.findTimeSheetByIdTimeLineWithNoteBook(timLineId));
+                list = timeSheetService.findTimeSheetByIdTimeLineWithNoteBook(timLineId);
             }
         } else {
             if (timLineId == null || timLineId.isEmpty()) {
-                model.addAttribute("list", timeSheetService.findTimeSheetByUserIdTeachWithNoteBook(user.getId()));
+                list = timeSheetService.findTimeSheetByUserIdTeachWithNoteBook(user.getId());
             } else {
-                model.addAttribute("list",
-                        timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeachWithNoteBook(timLineId,
-                                user.getId()));
+                list = timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeachWithNoteBook(timLineId, user.getId());
             }
         }
+
+        for (TimeSheetResponsive timeSheetResponsive : list) {
+
+            if (timeSheetResponsive.getTimeLineEndate() != null
+                    && timeSheetResponsive.getTimeLineEndate().isBefore(LocalDate.now())) {
+                timeSheetResponsive.setNoAction(true);
+            }
+        }
+        model.addAttribute("list", list);
         return "page/note-book/list";
     }
 
@@ -99,6 +116,19 @@ public class NoteBookController {
     public String getMethodName(@PathVariable(name = "id") String param, HttpServletRequest request) {
         noteBookService.deleteById(param, request);
         return "redirect:/danh-sach";
+    }
+
+    @GetMapping("/ky-so-dau-bai/edit/{id}")
+    public String getForm(@PathVariable(name = "id") String param, HttpServletRequest request, Model model) {
+        model.addAttribute("noteBook", timeSheetService.findNoteBookByIdWWithTimeSheet(param));
+        return "page/note-book/edit";
+    }
+
+    @PostMapping("/ky-so-dau-bai/edit")
+    public String updateNoteBook(@ModelAttribute("noteBook") TimeSheetResponsive param, HttpServletRequest request,
+            Model model) {
+        System.out.println(param);
+        return "page/note-book/edit";
     }
 
 }

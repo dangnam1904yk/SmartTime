@@ -1,9 +1,11 @@
 package com.vinschool.smarttime.service;
 
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 
 import com.vinschool.smarttime.entity.TimeSheet;
+import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,5 +36,15 @@ public interface TimeSheetService {
     List<TimeSheetResponsive> findTimeSheetByUserIdTeachWithNoteBook(String userId);
 
     List<TimeSheetResponsive> findTimeSheetWithNoteBook();
+
+    TimeSheetResponsive findNoteBookByIdWWithTimeSheet(String id);
+
+    List<TimeSheet> getAll();
+
+    List<TimeSheetResponsive> getAllTimeSheetResponsive();
+
+    List<TimeSheetResponsive> getTimeSheetResponsiveByUserIdTeach(String id);
+
+    List<TimeSheetChekNotification> CheckSoDauBai(LocalDate dateCheck, Boolean isActive, Boolean isTrain, String thu);
 
 }

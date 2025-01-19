@@ -11,4 +11,14 @@ public interface Constant {
         public final String ADMIN = "ADMIN";
 
     }
+
+    public interface SATATUS {
+        public final Boolean ACTIVE = true;
+        public final Boolean NO_ACTIVE = false;
+    }
+
+    public interface SATATUS_TRAIN {
+        public final Boolean YES = true;
+        public final Boolean NO = false;
+    }
 }

@@ -40,6 +40,5 @@ public class CategorySubject {
 
     @OneToMany(mappedBy = "categorySubject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
-    @JsonManagedReference
     List<TimeSheet> timeSheet;
 }
