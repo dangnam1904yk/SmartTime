@@ -223,7 +223,7 @@ public class TimeSheetServiceImpl implements TimeSheetService {
 
     @Override
     public List<TimeSheetChekNotification> CheckSoDauBai(LocalDate dateCheck, Boolean isActive, Boolean isTrain,
-            String thu) {
-        return timeSheetRepository.CheckSoDauBai(dateCheck, isActive, isTrain, thu);
+            String thu, String userId) {
+        return timeSheetRepository.CheckSoDauBai(dateCheck, isActive, isTrain, thu, userId);
     }
 }

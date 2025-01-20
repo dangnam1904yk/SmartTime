@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/share/header :: header}">
+
+</head>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        width: 14%;
+        height: 50px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .marked {
+        background: red;
+        color: white;
+    }
+
+    .selected {
+        background: blue;
+        color: white;
+    }
+
+    .action-table {
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        padding: 5px;
+        border: 1px solid black;
+    }
+
+    #calendar-body td:hover {
+        background-color: lightblue;
+    }
+
+    #month-year {
+        font-size: 1.2rem;
+    }
+
+    td {
+        height: 50px;
+        vertical-align: middle;
+    }
+
+    td.marked {
+        background-color: #e30e0e;
+        /* Màu vàng nhạt */
+        color: #fff;
+        /* Chữ trắng */
+        font-weight: bold;
+    }
+
+    .form-group>div {
+        flex: 1;
+    }
+
+    .form-group>div:first-child {
+        margin-right: 10px;
+    }
+
+    #table-action-note-book>thead th {
+        position: sticky;
+        /* Cố định tiêu đề */
+        top: 0;
+        /* Đặt ở đầu bảng */
+        background: #f1f1f1;
+        z-index: 500;
+        /* Đảm bảo nằm trên các hàng */
+    }
+
+    .table-scoll {
+        max-height: 400px;
+        /* Giới hạn chiều cao */
+        overflow-y: auto;
+        /* Kích hoạt thanh cuộn dọc */
+        overflow-x: auto;
+    }
+</style>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div th:replace="~{/share/menu-left :: nav-left}">
+        </div>
+        <div class="content">
+            <nav th:replace="~{/share/header-top :: header-top}"></nav>
+              
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4" style="padding-bottom: 10px;">
+                    <div class="col-4 col-md-4">
+                        <form action="/cron" method="post">
+                            <div class="form-group">
+                            
+                                <label for="categorytimeLine" class="font-weight-bold">Cấu hình thời gian chạy kiểm tra nhập sổ đầu bài</label>
+                                <input type="text" name="cron" class="form-control"  th:value="${cron}">
+                                <span style="font-size: 15px; color: #559e7c;" th:text="${succes}"></span>
+                            </div>
+                            <button type="submit" class="btn btn-success"> Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+<script th:src="@{/js/note-book/note-book.js}">
+</script>
+
+<th:block th:replace="~{/share/footer :: footer}"></th:block>
+
+</html>

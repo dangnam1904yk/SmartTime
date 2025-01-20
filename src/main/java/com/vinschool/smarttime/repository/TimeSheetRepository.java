@@ -86,9 +86,10 @@ public interface TimeSheetRepository extends JpaRepository<TimeSheet, String> {
 
         @Query("Select new com.vinschool.smarttime.model.response.TimeSheetChekNotification(b.id, b.startDate, b.endDate, c.id, c.hourStart, c.hourEnd, a.id,a.thu,e.id, e.isTrain, e.createDate, d.id )"
                         + "From TimeSheet a  join a.timeLine  b join a.categoryPeriod c join a.user d left join a.noteBook e"
-                        + " where  b.endDate >=:dateCheck and b.isActive =:isActive  and a.thu =:thu order by a.thu desc")
+                        + " where  b.endDate >=:dateCheck and b.isActive =:isActive  and a.thu =:thu and d.id =:userId order by a.thu desc")
         List<TimeSheetChekNotification> CheckSoDauBai(@Param("dateCheck") LocalDate dateCheck,
                         @Param("isActive") Boolean isActive,
                         @Param("isTrain") Boolean isTrain,
-                        @Param("thu") String thu);
+                        @Param("thu") String thu,
+                        @Param("userId") String userId);
 }

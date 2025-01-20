@@ -8,4 +8,5 @@ import com.vinschool.smarttime.entity.AccountSchedule;
 @Repository
 public interface AccountScheduleRepository extends JpaRepository<AccountSchedule, String> {
 
+    AccountSchedule findByUserId(String userId);
 }

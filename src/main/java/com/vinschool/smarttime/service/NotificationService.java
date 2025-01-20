@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.vinschool.smarttime.entity.DetailNotification;
 import com.vinschool.smarttime.entity.Notification;
+import com.vinschool.smarttime.model.response.NotificationResponsive;
 import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.repository.DetailNotificationRepository;
 import com.vinschool.smarttime.repository.NotificationRepository;
@@ -65,61 +66,87 @@ public class NotificationService {
             thu = "CN";
         }
         List<TimeSheetChekNotification> list = timeSheetService.CheckSoDauBai(LocalDate.now(), Constant.SATATUS.ACTIVE,
-                Constant.SATATUS_TRAIN.YES, thu);
+                Constant.SATATUS_TRAIN.YES, thu, accountId);
 
+        NotificationResponsive notificationResponsive = new NotificationResponsive();
+        notificationResponsive.setUserId(accountId);
         for (TimeSheetChekNotification data : list) {
-            if (data.getNoteBookId() == null) {
-                Notification notification = new Notification();
-                notification.setTitle("Thông báo, bạn chưa nhập sổ đầu bài ngày hôm nay");
-                notification.setContent(
-                        "Bạn chưa nhập sổ đầu bài ngày hôm này, vui lòng đăng nhập vào hệ thống để nhập ngay nhé ");
-                notification.setCreateDate(new Date());
-                notification.setUpdateDate(new Date());
-                Notification notiSave = notificationRepository.save(notification);
-                DetailNotification detailNotification = new DetailNotification();
-                detailNotification.setNotification(notification);
-                detailNotification.setUser(userService.findById(data.getUserId()));
-                detailNotificationRepository.save(detailNotification);
-            }
 
-            if (data.getNoteBookId() != null && data.getNoteBookIsTrain() == false) {
-                Notification notification = new Notification();
-                notification.setTitle("Thông báo, bạn chưa đánh dấu đã dạy ");
-                notification.setContent(
-                        "Bạn chưa nhập sổ đầu bài ngày hôm này, vui lòng đăng nhập vào hệ thống để xử lý ngay nhé ");
-                notification.setCreateDate(new Date());
-                notification.setUpdateDate(new Date());
-                Notification notiSave = notificationRepository.save(notification);
-                DetailNotification detailNotification = new DetailNotification();
-                detailNotification.setNotification(notification);
-                detailNotification.setUser(userService.findById(data.getUserId()));
-                detailNotificationRepository.save(detailNotification);
-            }
-
-            LocalTime startTime = LocalTime.of(9, 0); // 09:00
-            LocalTime endTime = LocalTime.of(17, 0); // 17:00
-
-            // Giờ cần kiểm tra
-            LocalTime checkTime = LocalTime.of(14, 30); // 14:30
+            LocalTime startTime = LocalTime.of(18, 0); // 09:00
+            LocalTime endTime = LocalTime.of(19, 0); // 17:00
+            LocalTime checkTime = LocalTime.now(); // 14:30
 
             // Kiểm tra nếu giờ nằm trong khoảng
             boolean isInRange = isTimeInRange(checkTime, startTime, endTime);
-            if (isInRange == false && data.getNoteBookId() == null) {
-                Notification notification = new Notification();
-                notification.setTitle("Thông báo xử phạt, bạn đã quá giờ cho phép nhập sổ");
-                notification.setContent(
-                        "Bạn sẽ bị xử phạt với số tiền 50.000đ cho một lỗi quên nhập tiết");
-                notification.setCreateDate(new Date());
-                notification.setUpdateDate(new Date());
-                Notification notiSave = notificationRepository.save(notification);
-                DetailNotification detailNotification = new DetailNotification();
-                detailNotification.setNotification(notification);
-                detailNotification.setUser(userService.findById(data.getUserId()));
-                detailNotificationRepository.save(detailNotification);
-            }
-        }
+            if (isInRange == true) {
+                if (data.getNoteBookId() == null) {
+                    Notification notification = new Notification();
+                    notification.setTitle("Thông báo xử phạt, bạn đã quá giờ cho phép nhập sổ");
+                    notification.setContent(
+                            "Bạn sẽ bị xử phạt với số tiền 50.000đ cho một lỗi quên nhập tiết");
 
-        messagingTemplate.convertAndSend("/topic/notifications", notificationMessage);
+                    notification.setCreateDate(new Date());
+                    notification.setUpdateDate(new Date());
+                    notificationResponsive.setTitle(notification.getTitle());
+                    notificationResponsive.setContent(notification.getContent());
+                    Notification notiSave = notificationRepository.save(notification);
+                    DetailNotification detailNotification = new DetailNotification();
+                    detailNotification.setNotification(notification);
+                    detailNotification.setUser(userService.findById(data.getUserId()));
+                    detailNotificationRepository.save(detailNotification);
+                }
+
+                if (data.getNoteBookId() != null && data.getNoteBookIsTrain() == true) {
+                    Notification notification = new Notification();
+                    notification.setTitle("Chúc mừng bạn đã hoàn thành nhập sổ đầu bài ngày hôm nay");
+                    notification.setContent(
+                            "Chúc mừng bạn đã hoàn thành nhập sổ đầu bài ngày hôm nay");
+                    notification.setCreateDate(new Date());
+                    notification.setUpdateDate(new Date());
+                    notificationResponsive.setTitle(notification.getTitle());
+                    notificationResponsive.setContent(notification.getContent());
+                    Notification notiSave = notificationRepository.save(notification);
+                    DetailNotification detailNotification = new DetailNotification();
+                    detailNotification.setNotification(notification);
+                    detailNotification.setUser(userService.findById(data.getUserId()));
+                    detailNotificationRepository.save(detailNotification);
+                }
+            } else {
+                if (data.getNoteBookId() == null) {
+                    Notification notification = new Notification();
+                    notification.setTitle("Thông báo, bạn chưa nhập sổ đầu bài ngày hôm nay");
+                    notification.setContent(
+                            "Bạn chưa nhập sổ đầu bài ngày hôm này, vui lòng đăng nhập vào hệ thống để nhập ngay nhé ");
+                    notification.setCreateDate(new Date());
+                    notification.setUpdateDate(new Date());
+                    notificationResponsive.setTitle(notification.getTitle());
+                    notificationResponsive.setContent(notification.getContent());
+                    Notification notiSave = notificationRepository.save(notification);
+                    DetailNotification detailNotification = new DetailNotification();
+                    detailNotification.setNotification(notification);
+                    detailNotification.setUser(userService.findById(data.getUserId()));
+                    detailNotificationRepository.save(detailNotification);
+                }
+
+                if (data.getNoteBookId() != null && data.getNoteBookIsTrain() == false) {
+                    Notification notification = new Notification();
+                    notification.setTitle("Thông báo, bạn chưa đánh dấu đã dạy ");
+                    notification.setContent(
+                            "Bạn chưa nhập sổ đầu bài ngày hôm này, vui lòng đăng nhập vào hệ thống để xử lý ngay nhé ");
+                    notification.setCreateDate(new Date());
+                    notification.setUpdateDate(new Date());
+                    notificationResponsive.setTitle(notification.getTitle());
+                    notificationResponsive.setContent(notification.getContent());
+                    Notification notiSave = notificationRepository.save(notification);
+                    DetailNotification detailNotification = new DetailNotification();
+                    detailNotification.setNotification(notification);
+                    detailNotification.setUser(userService.findById(data.getUserId()));
+                    detailNotificationRepository.save(detailNotification);
+                }
+            }
+
+        }
+        messagingTemplate.convertAndSend("/topic/notifications", notificationResponsive);
     }
 
     private static boolean isTimeInRange(LocalTime time, LocalTime start, LocalTime end) {

@@ -320,7 +320,7 @@
 
     <th:block th:replace="~{/share/footer :: footer}"></th:block>
 </body>
-<script>
+<script th:inline="javascript">
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
             Swal.fire({
@@ -355,9 +355,13 @@
     stompClient.connect({}, function (frame) {
         // Lắng nghe topic /topic/notifications
         stompClient.subscribe('/topic/notifications', function (message) {
-            const notificationsDiv = document.getElementById('notifications');
-           // notificationsDiv.innerHTML += '<p>' + message.body + '</p>';
-            showBrowserNotification("Thông báo", message.body, message?.icon);
+          
+           const user = [[${user}]]
+           console.log(user);
+           const data = JSON.parse(message.body);
+           if(data.userId===user){
+            showBrowserNotification(data.title, data.content, data?.icon);
+           }
         });
     });
 

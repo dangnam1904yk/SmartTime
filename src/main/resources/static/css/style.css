@@ -69,7 +69,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 250px;
+    width: 270px;
     height: 100vh;
     overflow-y: auto;
     background: var(--secondary);
@@ -78,7 +78,7 @@
 }
 
 .content {
-    margin-left: 250px;
+    margin-left: 270px;
     min-height: 100vh;
     background: var(--dark);
     transition: 0.5s;
@@ -94,7 +94,7 @@
     }
 
     .content {
-        width: calc(100% - 250px);
+        width: calc(100% - 270px);
     }
 
     .content.open {
@@ -413,7 +413,7 @@ td {
 }
 
 #table-action-note-book>tbody td:last-child,
-thead th:last-child {
+#table-action-note-book>thead th:last-child {
     position: sticky;
     right: 0;
     /* Cố định cột cuối khi cuộn ngang */
@@ -442,7 +442,7 @@ thead th:last-child {
 
 
 #table-action-note-book>tbody td:nth-last-child(2),
-thead th:nth-last-child(2) {
+#table-action-note-book>thead th:nth-last-child(2) {
     position: sticky;
     right: 150px;
     /* Điều chỉnh đúng kích thước cột cuối cùng */

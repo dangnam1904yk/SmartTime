@@ -24,7 +24,7 @@ public class SchedulerInitializer {
             // Lấy danh sách lịch trình từ database
             scheduleConfigRepository.findAll().forEach(schedule -> {
                 schedulerService.scheduleNotification(
-                        schedule.getUser().getEmail(),
+                        schedule.getUser().getId(),
                         schedule.getUser().getFullName(),
                         schedule.getCronExpression());
             });

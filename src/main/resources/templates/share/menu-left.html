@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="ms-3">
-                <h6 class="mb-0">Jhon Doe</h6>
-                <span>Admin</span>
+                <h6 class="mb-0" th:text="${session.user.fullName}">Jhon Doe</h6>
+                <span  th:text="${session.user.email}"></span>
             </div>
         </div>
         <div class="navbar-nav w-100">
@@ -41,6 +41,8 @@
             <a href="/ky-so-dau-bai" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Nhập sổ đầu bài</a>
             <a th:href="@{/lap-lich-trong-trua}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch trông trưa</a>
             <a th:href="@{/trong-trua}" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Chấm công TT</a>
+            <a th:href="@{/cron}" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Cấu hình check sổ</a>
+            
 
 
             <div class="nav-item dropdown">

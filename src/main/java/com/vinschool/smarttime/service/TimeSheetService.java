@@ -45,6 +45,7 @@ public interface TimeSheetService {
 
     List<TimeSheetResponsive> getTimeSheetResponsiveByUserIdTeach(String id);
 
-    List<TimeSheetChekNotification> CheckSoDauBai(LocalDate dateCheck, Boolean isActive, Boolean isTrain, String thu);
+    List<TimeSheetChekNotification> CheckSoDauBai(LocalDate dateCheck, Boolean isActive, Boolean isTrain, String thu,
+            String userId);
 
 }

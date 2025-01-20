@@ -53,6 +53,9 @@ public class HomeController {
         User user = (User) session.getAttribute("user");
         if (user == null)
             return "redirect:/dang-nhap";
+        model.addAttribute("user", user.getId());
+        session.setAttribute("sesionUser", user);
+
         return "page/index";
     }
 
@@ -97,10 +100,21 @@ public class HomeController {
 
         if (check == true) {
             session.setAttribute("user", user);
+            String role = "";
+            for (int i = 0; i < user.getRole().size(); i++) {
+                role = role + user.getRole().get(i).getCodeRole() + ";";
+            }
+            session.setAttribute("sesionRole", role);
             return "redirect:/";
         } else {
             model.addAttribute("error", "Đăng nhập thất bại");
         }
         return "page/login";
+    }
+
+    @GetMapping("/dang-xuat")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 }
