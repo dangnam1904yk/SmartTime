@@ -58,7 +58,7 @@ public class TimeSheetController {
         model.addAttribute("rooms", categoryRoomSerive.getAll());
         model.addAttribute("period", categoryPeriodService.getAll());
         model.addAttribute("subjects", categorySubjectService.getAll());
-        model.addAttribute("user", userService.getAll());
+        model.addAttribute("user", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
         return "page/time-sheet/form";
     }
 

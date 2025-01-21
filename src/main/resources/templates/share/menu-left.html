@@ -36,10 +36,15 @@
                 </div>
             </div>
             <a th:href="@{/thoi-khoa-bieu}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Thời khóa biểu</a>
-            <a th:href="@{/lap-thoi-khoa-bieu}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch dạy</a>
+            <th:block th:if="${session.sesionRole.contains('ADMIN')}"> 
+                <a th:href="@{/lap-thoi-khoa-bieu}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch dạy</a>
+            
+            </th:block>
             <a href="/danh-sach" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Sổ đầu bài</a>
             <a href="/ky-so-dau-bai" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Nhập sổ đầu bài</a>
+            <th:block th:if="${session.sesionRole.contains('ADMIN')}"> 
             <a th:href="@{/lap-lich-trong-trua}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch trông trưa</a>
+            </th:block>
             <a th:href="@{/trong-trua}" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Chấm công TT</a>
             <a th:href="@{/cron}" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Cấu hình check sổ</a>
             

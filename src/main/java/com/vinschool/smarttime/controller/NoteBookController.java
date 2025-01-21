@@ -108,18 +108,33 @@ public class NoteBookController {
     @PostMapping("/cap-nhat-trang-thai")
     public String UpdateStatusNotBook(Model model, HttpServletRequest request,
             @RequestParam("listData") String listData) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+
         noteBookService.updateStatusNoteBook(listData, request);
         return "redirect:/danh-sach";
     }
 
     @GetMapping("/delete/{id}")
     public String getMethodName(@PathVariable(name = "id") String param, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+
         noteBookService.deleteById(param, request);
         return "redirect:/danh-sach";
     }
 
     @GetMapping("/ky-so-dau-bai/edit/{id}")
     public String getForm(@PathVariable(name = "id") String param, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+
         model.addAttribute("noteBook", timeSheetService.findNoteBookByIdWWithTimeSheet(param));
         return "page/note-book/edit";
     }
@@ -127,6 +142,11 @@ public class NoteBookController {
     @PostMapping("/ky-so-dau-bai/edit")
     public String updateNoteBook(@ModelAttribute("noteBook") TimeSheetResponsive param, HttpServletRequest request,
             Model model) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+
         System.out.println(param);
         return "page/note-book/edit";
     }

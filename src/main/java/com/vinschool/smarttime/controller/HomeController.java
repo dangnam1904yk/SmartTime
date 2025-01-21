@@ -3,6 +3,7 @@ package com.vinschool.smarttime.controller;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,9 +101,9 @@ public class HomeController {
 
         if (check == true) {
             session.setAttribute("user", user);
-            String role = "";
+            List<String> role = new ArrayList<String>();
             for (int i = 0; i < user.getRole().size(); i++) {
-                role = role + user.getRole().get(i).getCodeRole() + ";";
+                role.add(user.getRole().get(i).getCodeRole());
             }
             session.setAttribute("sesionRole", role);
             return "redirect:/";

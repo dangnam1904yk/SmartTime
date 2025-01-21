@@ -20,6 +20,7 @@ import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 import com.vinschool.smarttime.service.CheckNoonService;
 import com.vinschool.smarttime.service.UserService;
+import com.vinschool.smarttime.ulti.Constant;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,7 +38,6 @@ public class CheckNoonController {
     public String CreatDate(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        model.addAttribute("listUser", userService.getAll());
         if (user == null)
             return "redirect:/dang-nhap";
 
@@ -47,24 +47,40 @@ public class CheckNoonController {
             model.addAttribute("list", checkNoonService.findByUserIdWorkAndTimeLine(user.getId(), "2025-01"));
 
         }
+        model.addAttribute("listUser", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
+
         return "page/checknoon/list";
     }
 
     @GetMapping("/lap-lich-trong-trua")
-    public String FormLapLich(Model model) {
-        model.addAttribute("users", userService.getAll());
+    public String FormLapLich(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+
+        model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
         return "page/checknoon/phan-cong";
     }
 
     @PostMapping("/lap-lich-trong-trua")
     public String CreateTimeLine(@RequestParam("data") String data, @RequestParam("timeLine") String timeLine,
             HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
         checkNoonService.LuuPhanCongLich(data, timeLine, request);
         return "page/checknoon/list";
     }
 
     @PostMapping("/cham-cong")
     public String ChamCong(@RequestParam("data") String data, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            return "redirect:/dang-nhap";
+
         checkNoonService.ChamCong(data, request);
         return "redirect:/trong-trua";
     }
