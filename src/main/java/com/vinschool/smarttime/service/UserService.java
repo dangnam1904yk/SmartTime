@@ -5,7 +5,7 @@ import com.vinschool.smarttime.entity.User;
 import java.util.List;
 
 public interface UserService {
-    void save(User user, String role);
+    User save(User user, String role);
 
     void delete(String id);
 

@@ -30,7 +30,12 @@ public class AccountScheduleController {
         User user = (User) session.getAttribute("user");
         if (user == null)
             return "redirect:/dang-nhap";
-        model.addAttribute("cron", scheduleRepository.findByUserId(user.getId()).getCronExpression());
+        AccountSchedule schedule = scheduleRepository.findByUserId(user.getId());
+        if (schedule != null) {
+            model.addAttribute("cron", scheduleRepository.findByUserId(user.getId()).getCronExpression());
+        } else {
+            model.addAttribute("cron", "");
+        }
         return "page/cron/form";
     }
 

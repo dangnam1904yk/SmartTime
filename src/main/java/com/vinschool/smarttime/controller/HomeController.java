@@ -77,7 +77,12 @@ public class HomeController {
         user.setFullName(fullName);
         user.setPassword(password);
         // roleService.findByCode("GIAOVIEN");
-        userService.save(user, "GIAOVIEN");
+        User user2 = userService.save(user, "GIAOVIEN");
+        if (user2 == null) {
+            model.addAttribute("error", "Email đã tồn tại");
+        } else {
+            model.addAttribute("sucess", "Đăng ký thành công");
+        }
         return "page/register";
     }
 

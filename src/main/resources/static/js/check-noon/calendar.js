@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedDataForm = document.getElementById("selectedDataForm");
         const dataInput = document.getElementById("dataInput");
         const timeLine = document.getElementById("timeLine");
+        const thangPhanCong = document.getElementById('thangPhanCong');
         
          // Lấy ngày hiện tại
     const now = new Date();
@@ -43,6 +44,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         categorySelect.addEventListener("change", function () {
             labelGiaoVien = categorySelect.options[categorySelect.selectedIndex].text;
+        });
+
+        thangPhanCong.addEventListener("change", function () {
+           console.log(thangPhanCong.value);
+           currentDate = new Date( thangPhanCong.value+'-01');
+           renderCalendar(new Date( thangPhanCong.value+'-01'));
+           
         });
 
         caPhan.addEventListener("change", function () {
@@ -112,7 +120,9 @@ document.addEventListener("DOMContentLoaded", function () {
             actionTableBody.appendChild(row);
 
             row.querySelector(".remove-btn").addEventListener("click", function () {
-                const index = selectedData.findIndex(item => item.date === date && item.idUser === idUser && item.codeCar ===ca) ;
+               
+                
+                const index = selectedData.findIndex(item => item.date === date && item.idUser === idUser && item.codeCa ===ca) ;
 
                 if (index !== -1) {
                     selectedData.splice(index, 1);
@@ -134,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
         submitDataButton.addEventListener("click", function () {
             if (selectedData.length > 0) {
                 dataInput.value = JSON.stringify(selectedData); // Gắn JSON vào input hidden
-                const dataTimeLine = {isActive: isActive.value, month: inputMonth.value }
+                const dataTimeLine = {isActive: isActive.checked, month: inputMonth.value }
                 timeLine.value = JSON.stringify(dataTimeLine);
                 selectedDataForm.submit(); // Gửi form
             } else {

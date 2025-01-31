@@ -27,6 +27,7 @@ import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 import com.vinschool.smarttime.repository.CheckNoonRepository;
 
 import com.vinschool.smarttime.repository.TimeLineRepository;
+import com.vinschool.smarttime.ulti.Constant;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,8 +71,9 @@ public class CheckNoonServiceImpl implements CheckNoonService {
             ;
 
             timeLineDb.setActive(
-                    map.get("isActive") != null ? map.get("isActive").toString() == "on" ? true : false : false);
+                    map.get("isActive") != null ? map.get("isActive").toString().equals("true") ? true : false : false);
             timeLineDb.setMonth(map.get("month").toString());
+            timeLineDb.setType(Constant.TYPE_TIME_LINE.TRONG_TRUA);
             TimeLine timeLineSave = timeLineService.save(timeLineDb);
 
             dataList = objectMapper.readValue(request, new TypeReference<>() {

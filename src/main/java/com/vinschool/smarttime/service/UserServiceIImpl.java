@@ -20,7 +20,7 @@ public class UserServiceIImpl implements UserService {
     private final RoleService roleService;
 
     @Override
-    public void save(User user, String role) {
+    public User save(User user, String role) {
         Role role1 = roleService.findById(role);
         if (role1 == null) {
             role1 = roleService.findByCode(role);
@@ -29,22 +29,30 @@ public class UserServiceIImpl implements UserService {
         roles.add(role1);
 
         user.setRole(roles);
+
+        User userCheck = null;
         if (user.getId() == null || user.getId() == "") {
-            if (repository.findByEmail(user.getEmail()) == null) {
+            userCheck = repository.findByEmail(user.getEmail());
+            if (userCheck == null) {
                 user.setPassword(HashPassword.hashPass(user.getPassword()));
                 user.setCreateDate(new Date());
                 user.setCreateDate(new Date());
                 user.setId(null);
+            } else {
+                return null;
             }
         } else {
             User oldUser = findById(user.getId());
-            if (repository.findByEmailAndIdIsNot(user.getEmail(), user.getId()) == null) {
+            userCheck = repository.findByEmailAndIdIsNot(user.getEmail(), user.getId());
+            if (userCheck == null) {
                 user.setPassword(oldUser.getPassword());
                 user.setCreateDate(oldUser.getCreateDate());
                 user.setUpdateDate(new Date());
+            } else {
+                return null;
             }
         }
-        repository.save(user);
+        return repository.save(user);
     }
 
     @Override

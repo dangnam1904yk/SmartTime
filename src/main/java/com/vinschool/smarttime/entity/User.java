@@ -33,7 +33,7 @@ public class User {
     String avatar;
     Date createDate;
     Date updateDate;
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @ManyToMany
     List<Role> role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

@@ -23,6 +23,7 @@ import com.vinschool.smarttime.model.request.CheckNoonRequest;
 import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.repository.TimeSheetRepository;
+import com.vinschool.smarttime.ulti.Constant;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -118,6 +119,7 @@ public class TimeSheetServiceImpl implements TimeSheetService {
                 if (map.get("nameTimeLine") != null) {
                     timeLineDb.setNameTimeLine(map.get("nameTimeLine").toString());
                 }
+                timeLineDb.setType(Constant.TYPE_TIME_LINE.SO_DAU_BAI);
                 TimeLine timeLineSave = timeLineService.save(timeLineDb);
 
                 dataList = objectMapper.readValue(dataTimeSheet, new TypeReference<>() {
@@ -135,7 +137,7 @@ public class TimeSheetServiceImpl implements TimeSheetService {
                     timSheet.setThu(item.get("thu").toString());
                     timSheet.setCreateBy(user.getId());
                     timSheet.setCreateDate(new Date());
-                    timSheet.setUser(userService.findById(item.get("useId").toString()));
+                    timSheet.setUser(userService.findById(item.get("userId").toString()));
                     timSheet.setCategoryClass(categoryClassService.getById(item.get("categoryClassId").toString()));
                     timSheet.setCategoryPeriod(categoryPeriodService.detail(item.get("categoryPeriodId").toString()));
                     timSheet.setCategorySubject(

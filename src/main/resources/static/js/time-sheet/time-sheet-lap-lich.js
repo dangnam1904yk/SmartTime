@@ -121,11 +121,11 @@ nameTimeSheet.addEventListener("change", function(){
             uid: GenerectUUID(),
             id: null,
             thu: categoryThu.value,
-            category_class_id: categoryClass.value,
-            category_period_id: categoryPeriod.value,
-            category_subject_id: categorySubject.value,
-            category_room_id: categoryRoom.value,
-            user_id: categoryUser.value,
+            categoryClassId: categoryClass.value,
+            categoryPeriodId: categoryPeriod.value,
+            categorySubjectId: categorySubject.value,
+            categoryRoomId: categoryRoom.value,
+            userId: categoryUser.value,
             "labelClass": labelClass,
             "labelPeriod": labelPeriod,
             "labelRoom": labelRoom,
@@ -137,7 +137,7 @@ nameTimeSheet.addEventListener("change", function(){
         console.log(data);
 
         
-        const index = listTimeSheet.findIndex(item => item.thu === data.thu && item.category_period_id === data.category_period_id) ;
+        const index = listTimeSheet.findIndex(item => item.thu === data.thu && item.categoryPeriodId === data.categoryPeriodId) ;
 
             if (index !== -1) {
                 Swal.fire({

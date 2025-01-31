@@ -21,7 +21,8 @@ public class Role {
     @Column(unique = true)
     String codeRole;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany
+    // @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"),
+    // inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> users;
 }
