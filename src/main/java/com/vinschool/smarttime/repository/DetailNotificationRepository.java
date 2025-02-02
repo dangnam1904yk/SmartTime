@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.vinschool.smarttime.entity.DetailNotification;
 
 @Repository
-public interface DetailNotificationRepository extends JpaRepository<DetailNotification,String> {
-    
+public interface DetailNotificationRepository extends JpaRepository<DetailNotification, String> {
+    long countByUserId(String userId);
+
+    long count();
 }

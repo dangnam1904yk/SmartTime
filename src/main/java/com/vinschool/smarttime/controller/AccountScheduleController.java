@@ -11,6 +11,7 @@ import com.vinschool.smarttime.entity.AccountSchedule;
 import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.repository.AccountScheduleRepository;
 import com.vinschool.smarttime.service.SchedulerService;
+import com.vinschool.smarttime.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +24,9 @@ public class AccountScheduleController {
 
     @Autowired
     private SchedulerService schedulerService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/cron")
     public String getMethodName(HttpServletRequest request, Model model) {
@@ -46,6 +50,10 @@ public class AccountScheduleController {
         if (user == null)
             return "redirect:/dang-nhap";
         AccountSchedule accountSchedule = scheduleRepository.findByUserId(user.getId());
+        if (accountSchedule == null) {
+            accountSchedule = new AccountSchedule();
+        }
+        accountSchedule.setUser(userService.findById(user.getId()));
         accountSchedule.setCronExpression(cron);
         scheduleRepository.save(accountSchedule);
         schedulerService.scheduleNotification(user.getId(), user.getEmail(), cron);

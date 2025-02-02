@@ -56,7 +56,11 @@ public class HomeController {
             return "redirect:/dang-nhap";
         model.addAttribute("user", user.getId());
         session.setAttribute("sesionUser", user);
-
+        if (user.getEmail().startsWith("admin")) {
+            model.addAttribute("countNoti", detailNotificationRepository.count());
+        } else {
+            model.addAttribute("countNoti", detailNotificationRepository.countByUserId(user.getId()));
+        }
         return "page/index";
     }
 

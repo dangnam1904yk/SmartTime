@@ -146,7 +146,10 @@ public class NotificationService {
             }
 
         }
-        messagingTemplate.convertAndSend("/topic/notifications", notificationResponsive);
+        if (notificationResponsive.getTitle() != null && !notificationResponsive.getTitle().isEmpty()) {
+
+            messagingTemplate.convertAndSend("/topic/notifications", notificationResponsive);
+        }
     }
 
     private static boolean isTimeInRange(LocalTime time, LocalTime start, LocalTime end) {
