@@ -7,8 +7,8 @@ public interface Constant {
     }
 
     public interface ROLE {
-        public final String GIAO_VIEN = "GIAOVIEN";
-        public final String ADMIN = "ADMIN";
+        public final String GIAO_VIEN = "ROLE_GIAOVIEN";
+        public final String ADMIN = "ROLE_ADMIN";
 
     }
 

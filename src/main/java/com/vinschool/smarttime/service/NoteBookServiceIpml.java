@@ -14,12 +14,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.NoteBook;
 import com.vinschool.smarttime.entity.TimeLine;
-import com.vinschool.smarttime.entity.TimeSheet;
-import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.NoteBookRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,31 +26,20 @@ public class NoteBookServiceIpml implements NoteBookService {
     private final TimeSheetService timeSheetService;
 
     @Override
-    public NoteBook save(NoteBook noteBook, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return null;
+    public NoteBook save(NoteBook noteBook) {
         return noteBookRepository.save(noteBook);
     }
 
     @Override
-    public void deleteById(String id, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user != null)
-            noteBookRepository.deleteById(id);
+    public void deleteById(String id) {
+        noteBookRepository.deleteById(id);
     }
 
     @Override
-    public NoteBook findById(String id, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            Optional<NoteBook> optional = noteBookRepository.findById(id);
-            if (optional.isPresent())
-                return optional.get();
-        }
+    public NoteBook findById(String id) {
+        Optional<NoteBook> optional = noteBookRepository.findById(id);
+        if (optional.isPresent())
+            return optional.get();
         return null;
     }
 
@@ -63,13 +49,8 @@ public class NoteBookServiceIpml implements NoteBookService {
     }
 
     @Override
-    public void saveNoteBookFromStringData(String data, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return;
+    public void saveNoteBookFromStringData(String data, UserPrincipal user) {
         ObjectMapper objectMapper = new ObjectMapper();
-        TimeLine timeLineDb = new TimeLine();
         List<Map<String, Object>> dataList;
         try {
             dataList = objectMapper.readValue(data, new TypeReference<>() {
@@ -83,9 +64,9 @@ public class NoteBookServiceIpml implements NoteBookService {
                 } else {
                     noteBook.setId(item.get("id").toString());
                 }
-                noteBook.setCreateBy(user.getId());
+                noteBook.setCreateBy(user.getUser().getId());
                 noteBook.setCreateDate(new Date());
-                noteBook.setTimeSheet(timeSheetService.detail(item.get("timeSheetId").toString(), request));
+                noteBook.setTimeSheet(timeSheetService.detail(item.get("timeSheetId").toString()));
                 noteBook.setDetailErrorStudent(item.get("detailErrorStudent").toString());
                 noteBook.setGeneralComment(item.get("generalComment").toString());
                 noteBook.setLessonTopic(item.get("lessonTopic").toString());
@@ -118,11 +99,7 @@ public class NoteBookServiceIpml implements NoteBookService {
     }
 
     @Override
-    public void updateStatusNoteBook(String data, HttpServletRequest request) {
-
-        HttpSession httpSession = request.getSession();
-        User user = (User) httpSession.getAttribute("user");
-
+    public void updateStatusNoteBook(String data, UserPrincipal user) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         List<Map<String, Object>> dataList;
@@ -134,7 +111,7 @@ public class NoteBookServiceIpml implements NoteBookService {
 
                 NoteBook noteBook = null;
                 if (item.get("id") != null) {
-                    noteBook = findById(item.get("id").toString(), request);
+                    noteBook = findById(item.get("id").toString());
                 }
                 // if (item.get("isTrain").toString().equals("true")) {
                 // noteBook.setTrain(true);
@@ -142,12 +119,11 @@ public class NoteBookServiceIpml implements NoteBookService {
                 // noteBook.setTrain(false);
                 // }
                 noteBook.setIsTrain(Boolean.valueOf(item.get("isTrain").toString()));
-                noteBook.setUpdateBy(user.getId());
+                noteBook.setUpdateBy(user.getUser().getId());
                 noteBook.setUpdateDate(new Date());
                 list.add(noteBook);
-                save(noteBook, request);
+                save(noteBook);
             }
-            // noteBookRepository.saveAll(list);
 
         } catch (JsonMappingException e) {
 

@@ -3,21 +3,20 @@ package com.vinschool.smarttime.service;
 import java.util.List;
 
 import com.vinschool.smarttime.entity.NoteBook;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 
 public interface NoteBookService {
-    NoteBook save(NoteBook noteBook, HttpServletRequest request);
+    NoteBook save(NoteBook noteBook);
 
-    void deleteById(String id, HttpServletRequest request);
+    void deleteById(String id);
 
-    NoteBook findById(String id, HttpServletRequest request);
+    NoteBook findById(String id);
 
     List<NoteBook> findAll();
 
     void saveAll(List<NoteBook> list);
 
-    void saveNoteBookFromStringData(String data, HttpServletRequest request);
+    void saveNoteBookFromStringData(String data, UserPrincipal user);
 
-    void updateStatusNoteBook(String data, HttpServletRequest request);
+    void updateStatusNoteBook(String data, UserPrincipal user);
 }

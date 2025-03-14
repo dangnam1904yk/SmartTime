@@ -5,21 +5,22 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.vinschool.smarttime.entity.TimeSheet;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface TimeSheetService {
-    TimeSheet save(TimeSheet timeSheet, HttpServletRequest request);
+    TimeSheet save(TimeSheet timeSheet);
 
-    TimeSheet detail(String id, HttpServletRequest request);
+    TimeSheet detail(String id);
 
-    void delete(String id, HttpServletRequest request);
+    void delete(String id);
 
-    void saveAll(List<TimeSheet> timIterator, HttpServletRequest request);
+    void saveAll(List<TimeSheet> timIterator);
 
-    void createTimeSheet(String dataTimeSheet, String dataTimeLine, HttpServletRequest request);
+    void createTimeSheet(String dataTimeSheet, String dataTimeLine, UserPrincipal user);
 
     List<TimeSheet> findByTimeLineId(String timLineId);
 

@@ -21,7 +21,7 @@ public class Role {
     @Column(unique = true)
     String codeRole;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     // @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"),
     // inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> users;

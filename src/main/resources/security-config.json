@@ -1,0 +1,59 @@
+[
+    {
+        "endpoint": "/admin/**",
+        "roles": [
+            "ADMIN"
+        ]
+    },
+    {
+        "endpoint": "/user/**",
+        "roles": [
+            "USER"
+        ]
+    },
+    {
+        "endpoint": "/cron",
+        "methods": [
+            "POST",
+            "GET"
+        ],
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ],
+        "permission": [
+            "ADD",
+            "DELETE"
+        ]
+    },
+    {
+        "endpoint": "/api/notebook/getByTimeLine",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/timeLine/get-by-type",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/dm-lop-hoc",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+
+    {
+        "endpoint": "/public/**",
+        "roles": []
+    }
+]

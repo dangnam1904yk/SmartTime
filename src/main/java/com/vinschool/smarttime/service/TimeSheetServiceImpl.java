@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.entity.TimeSheet;
 import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.request.CheckNoonRequest;
 import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
@@ -42,20 +43,12 @@ public class TimeSheetServiceImpl implements TimeSheetService {
     private final CategorySubjectService categorySubjectService;
 
     @Override
-    public TimeSheet save(TimeSheet timeSheet, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return null;
+    public TimeSheet save(TimeSheet timeSheet) {
         return timeSheetRepository.save(timeSheet);
     }
 
     @Override
-    public TimeSheet detail(String id, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return null;
+    public TimeSheet detail(String id) {
         Optional<TimeSheet> optional = timeSheetRepository.findById(id);
         if (optional.isPresent())
             return optional.get();
@@ -63,27 +56,17 @@ public class TimeSheetServiceImpl implements TimeSheetService {
     }
 
     @Override
-    public void delete(String id, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            timeSheetRepository.deleteById(id);
-        }
+    public void delete(String id) {
+        timeSheetRepository.deleteById(id);
     }
 
     @Override
-    public void saveAll(List<TimeSheet> timIterator, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            timeSheetRepository.saveAll(timIterator);
-        }
+    public void saveAll(List<TimeSheet> timIterator) {
+        timeSheetRepository.saveAll(timIterator);
     }
 
     @Override
-    public void createTimeSheet(String dataTimeSheet, String dataTimeLine, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+    public void createTimeSheet(String dataTimeSheet, String dataTimeLine, UserPrincipal user) {
         if (user != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             TimeLine timeLineDb = new TimeLine();
@@ -135,7 +118,7 @@ public class TimeSheetServiceImpl implements TimeSheetService {
                     }
 
                     timSheet.setThu(item.get("thu").toString());
-                    timSheet.setCreateBy(user.getId());
+                    timSheet.setCreateBy(user.getUser().getId());
                     timSheet.setCreateDate(new Date());
                     timSheet.setUser(userService.findById(item.get("userId").toString()));
                     timSheet.setCategoryClass(categoryClassService.getById(item.get("categoryClassId").toString()));

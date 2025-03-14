@@ -11,24 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.vinschool.smarttime.entity.User;
-import com.vinschool.smarttime.model.request.NoteBookStatusRequest;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.service.NoteBookService;
 import com.vinschool.smarttime.service.TimeLineService;
 import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.service.UserService;
 import com.vinschool.smarttime.ulti.Constant;
-
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.server.PathParam;
-
-import org.springframework.web.bind.annotation.RequestBody;
+import com.vinschool.smarttime.ulti.SecurityUtils;
+import com.vinschool.smarttime.ulti.Constant.ROLE;
 
 @Controller
 public class NoteBookController {
@@ -44,42 +37,31 @@ public class NoteBookController {
     private UserService userService;
 
     @GetMapping("/ky-so-dau-bai")
-    public String FormKySo(Model model, HttpServletRequest request,
+    public String FormKySo(Model model,
             @RequestParam(name = "thang-hieu-luc", required = false) String thangHieuLuc) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
         model.addAttribute("timeLine",
                 timeLineService.findByEndDateAfterAndType(LocalDate.now(), Constant.TYPE_TIME_LINE.SO_DAU_BAI));
         return "page/note-book/form";
     }
 
     @PostMapping("/ky-so-dau-bai")
-    public String KySoDauBai(Model model, HttpServletRequest request,
+    public String KySoDauBai(Model model,
             @RequestParam(name = "data") String listData) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        noteBookService.saveNoteBookFromStringData(listData, request);
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        noteBookService.saveNoteBookFromStringData(listData, userPrincipal);
         return "page/note-book/form";
     }
 
     @GetMapping("/danh-sach")
-    public String DanhSach(Model model, HttpServletRequest request,
+    public String DanhSach(Model model,
             @RequestParam(name = "timeLine", required = false) String timLineId,
             @RequestParam(name = "giaovien", required = false) String userId) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         model.addAttribute("timeLine", timeLineService.findByType(Constant.TYPE_TIME_LINE.SO_DAU_BAI));
         model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
 
         List<TimeSheetResponsive> list = new ArrayList<>();
-        if (user.getEmail().startsWith("admin")) {
+        if (userPrincipal.getAuthorities().contains(ROLE.ADMIN)) {
             if (timLineId == null || timLineId.isEmpty()) {
                 list = timeSheetService.findTimeSheetWithNoteBook();
 
@@ -88,9 +70,10 @@ public class NoteBookController {
             }
         } else {
             if (timLineId == null || timLineId.isEmpty()) {
-                list = timeSheetService.findTimeSheetByUserIdTeachWithNoteBook(user.getId());
+                list = timeSheetService.findTimeSheetByUserIdTeachWithNoteBook(userPrincipal.getUser().getId());
             } else {
-                list = timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeachWithNoteBook(timLineId, user.getId());
+                list = timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeachWithNoteBook(timLineId,
+                        userPrincipal.getUser().getId());
             }
         }
 
@@ -106,48 +89,26 @@ public class NoteBookController {
     }
 
     @PostMapping("/cap-nhat-trang-thai")
-    public String UpdateStatusNotBook(Model model, HttpServletRequest request,
-            @RequestParam("listData") String listData) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
-        noteBookService.updateStatusNoteBook(listData, request);
+    public String UpdateStatusNotBook(Model model, @RequestParam("listData") String listData) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        noteBookService.updateStatusNoteBook(listData, userPrincipal);
         return "redirect:/danh-sach";
     }
 
     @GetMapping("/delete/{id}")
-    public String getMethodName(@PathVariable(name = "id") String param, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
-        noteBookService.deleteById(param, request);
+    public String getMethodName(@PathVariable(name = "id") String param) {
+        noteBookService.deleteById(param);
         return "redirect:/danh-sach";
     }
 
     @GetMapping("/ky-so-dau-bai/edit/{id}")
-    public String getForm(@PathVariable(name = "id") String param, HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
+    public String getForm(@PathVariable(name = "id") String param, Model model) {
         model.addAttribute("noteBook", timeSheetService.findNoteBookByIdWWithTimeSheet(param));
         return "page/note-book/edit";
     }
 
     @PostMapping("/ky-so-dau-bai/edit")
-    public String updateNoteBook(@ModelAttribute("noteBook") TimeSheetResponsive param, HttpServletRequest request,
-            Model model) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
-        System.out.println(param);
+    public String updateNoteBook(@ModelAttribute("noteBook") TimeSheetResponsive param, Model model) {
         return "page/note-book/edit";
     }
 

@@ -8,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.DetailNotificationRepository;
+import com.vinschool.smarttime.ulti.SecurityUtils;
+import com.vinschool.smarttime.ulti.Constant.ROLE;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -26,16 +29,13 @@ public class NotificationController {
     private DetailNotificationRepository detailNotificationRepository;
 
     @GetMapping("/danh-sach-thong-bao")
-    public String getMethodName(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        if (user.getEmail().startsWith("admin")) {
+    public String getMethodName(Model model) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        if (userPrincipal.getAuthorities().contains(ROLE.ADMIN)) {
 
             model.addAttribute("list", detailNotificationRepository.findAll());
         } else {
-            model.addAttribute("list", detailNotificationRepository.findByUserId(user.getId()));
+            model.addAttribute("list", detailNotificationRepository.findByUserId(userPrincipal.getUser().getId()));
         }
         return "page/notification/list";
     }

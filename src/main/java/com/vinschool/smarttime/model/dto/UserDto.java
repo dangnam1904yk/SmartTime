@@ -1,6 +1,7 @@
 package com.vinschool.smarttime.model.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,5 @@ public class UserDto {
     String avatar;
     Date createDate;
     Date updateDate;
+    List<RoleDto> roles;
 }

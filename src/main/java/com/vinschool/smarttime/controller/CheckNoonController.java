@@ -17,10 +17,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.CheckNoon;
 import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 import com.vinschool.smarttime.service.CheckNoonService;
 import com.vinschool.smarttime.service.UserService;
 import com.vinschool.smarttime.ulti.Constant;
+import com.vinschool.smarttime.ulti.SecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -35,16 +37,14 @@ public class CheckNoonController {
     private CheckNoonService checkNoonService;
 
     @GetMapping("/trong-trua")
-    public String CreatDate(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
-        if (user.getEmail().toLowerCase().startsWith("admin")) {
-            model.addAttribute("list", checkNoonService.findByUserIdCreateAndTimeLine(user.getId(), "2025-01"));
+    public String CreatDate(Model model) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        if (userPrincipal.getAuthorities().contains(Constant.ROLE.ADMIN)) {
+            model.addAttribute("list",
+                    checkNoonService.findByUserIdCreateAndTimeLine(userPrincipal.getUser().getId(), "2025-01"));
         } else {
-            model.addAttribute("list", checkNoonService.findByUserIdWorkAndTimeLine(user.getId(), "2025-01"));
+            model.addAttribute("list",
+                    checkNoonService.findByUserIdWorkAndTimeLine(userPrincipal.getUser().getId(), "2025-01"));
 
         }
         model.addAttribute("listUser", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
@@ -54,11 +54,6 @@ public class CheckNoonController {
 
     @GetMapping("/lap-lich-trong-trua")
     public String FormLapLich(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
         model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
         return "page/checknoon/phan-cong";
     }
@@ -66,22 +61,15 @@ public class CheckNoonController {
     @PostMapping("/lap-lich-trong-trua")
     public String CreateTimeLine(@RequestParam("data") String data, @RequestParam("timeLine") String timeLine,
             HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        checkNoonService.LuuPhanCongLich(data, timeLine, request);
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        checkNoonService.LuuPhanCongLich(data, timeLine, userPrincipal);
         return "page/checknoon/list";
     }
 
     @PostMapping("/cham-cong")
-    public String ChamCong(@RequestParam("data") String data, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-
-        checkNoonService.ChamCong(data, request);
+    public String ChamCong(@RequestParam("data") String data) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        checkNoonService.ChamCong(data, userPrincipal);
         return "redirect:/trong-trua";
     }
 
