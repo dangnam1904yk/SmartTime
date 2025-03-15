@@ -21,6 +21,7 @@ import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.service.UserService;
 import com.vinschool.smarttime.ulti.Constant;
 import com.vinschool.smarttime.ulti.Constant.ROLE;
+import com.vinschool.smarttime.ulti.Constant.ROLE_PREFIX;
 import com.vinschool.smarttime.ulti.SecurityUtils;
 
 @Controller
@@ -69,7 +70,7 @@ public class TimeSheetController {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         List<TimeSheetResponsive> list = new ArrayList<>();
 
-        if (userPrincipal.getAuthorities().contains(ROLE.ADMIN)) {
+        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
             if (timeLine == null || timeLine.equals("")) {
                 list = timeSheetService.getAllTimeSheetResponsive();
             } else {

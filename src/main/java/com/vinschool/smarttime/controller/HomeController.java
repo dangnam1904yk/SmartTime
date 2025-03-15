@@ -92,31 +92,4 @@ public class HomeController {
     public String FormLogin(Model model) {
         return "page/login";
     }
-
-    @PostMapping("/dang-nhap")
-    public String Login(Model model, @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        User user = userService.findByEmail(email);
-        if (user == null) {
-            model.addAttribute("error", "Đăng nhập thất bại");
-            return "page/login";
-        }
-        boolean check = HashPassword.checkPass(password, user.getPassword());
-
-        if (check == true) {
-            session.setAttribute("user", user);
-            List<String> role = new ArrayList<String>();
-            for (int i = 0; i < user.getRole().size(); i++) {
-                role.add(user.getRole().get(i).getCodeRole());
-            }
-            session.setAttribute("sesionRole", role);
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Đăng nhập thất bại");
-        }
-        return "page/login";
-    }
 }

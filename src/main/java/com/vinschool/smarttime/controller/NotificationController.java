@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.DetailNotificationRepository;
 import com.vinschool.smarttime.ulti.Constant.ROLE;
+import com.vinschool.smarttime.ulti.Constant.ROLE_PREFIX;
 import com.vinschool.smarttime.ulti.SecurityUtils;
 
 @Controller
@@ -27,7 +28,7 @@ public class NotificationController {
     @GetMapping("/danh-sach-thong-bao")
     public String getMethodName(Model model) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
-        if (userPrincipal.getAuthorities().contains(ROLE.ADMIN)) {
+        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
 
             model.addAttribute("list", detailNotificationRepository.findAll());
         } else {

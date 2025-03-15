@@ -13,6 +13,7 @@ import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.ulti.Constant.ROLE;
+import com.vinschool.smarttime.ulti.Constant.ROLE_PREFIX;
 import com.vinschool.smarttime.ulti.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class RestTimeSheetController {
     public List<TimeSheetResponsive> getTimeSheetByTimeLine(@RequestParam("id") String param) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         List<TimeSheetResponsive> result = new ArrayList<>();
-        if (userPrincipal.getAuthorities().contains(ROLE.ADMIN)) {
+        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
 
             result = timeSheetService.findTimeSheetByIdTimeLine(param);
 

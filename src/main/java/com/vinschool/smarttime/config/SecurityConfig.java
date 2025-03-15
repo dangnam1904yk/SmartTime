@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import com.vinschool.smarttime.exception.CustomAccessDeniedHandler;
 import com.vinschool.smarttime.service.CustomUserDetailsService;
 
 import jakarta.annotation.PostConstruct;
@@ -40,6 +42,8 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
 
     private final SecurityConfigReader securityConfigReader;
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Value("${security.config.file:classpath:security-config.json}")
     private String securityConfigFile;
@@ -142,7 +146,13 @@ public class SecurityConfig {
                         response.sendRedirect("/dang-nhap?error");
                     });
                 })
-                .logout(out -> out.logoutSuccessUrl("/dang-nhap"));
+                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
+                .logout(logout -> logout
+                        .logoutUrl("/dang-xuat")
+                        .logoutSuccessUrl("/dang-nhap")
+                        .invalidateHttpSession(true)
+                        .deleteCookies()
+                        .permitAll());
         return http.build();
     }
 

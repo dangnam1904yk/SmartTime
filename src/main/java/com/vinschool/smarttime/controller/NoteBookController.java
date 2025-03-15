@@ -22,6 +22,7 @@ import com.vinschool.smarttime.service.UserService;
 import com.vinschool.smarttime.ulti.Constant;
 import com.vinschool.smarttime.ulti.SecurityUtils;
 import com.vinschool.smarttime.ulti.Constant.ROLE;
+import com.vinschool.smarttime.ulti.Constant.ROLE_PREFIX;
 
 @Controller
 public class NoteBookController {
@@ -61,7 +62,7 @@ public class NoteBookController {
         model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
 
         List<TimeSheetResponsive> list = new ArrayList<>();
-        if (userPrincipal.getAuthorities().contains(ROLE.ADMIN)) {
+        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
             if (timLineId == null || timLineId.isEmpty()) {
                 list = timeSheetService.findTimeSheetWithNoteBook();
 

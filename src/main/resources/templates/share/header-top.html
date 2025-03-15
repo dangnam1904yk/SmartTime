@@ -46,7 +46,8 @@
             <div class="dropdown-menu dropdown-menu-end  border-0 rounded-0 rounded-bottom m-0">
                 <a href="#" class="dropdown-item">My Profile</a>
                 <a href="#" class="dropdown-item">Settings</a>
-                <a href="/dang-xuat" class="dropdown-item">Log Out</a>
+                <form th:action="@{/dang-xuat}" method="post"><button type="submit" class="dropdown-item">Log Out</button></form>
+                
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ public class UserPrincipal implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getCodeRole()))
                 .collect(Collectors.toList()));
         return user.getRole().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getCodeRole())) // Thêm "ROLE_"
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getCodeRole()))
                 .collect(Collectors.toList());
 
     }
