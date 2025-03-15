@@ -41,7 +41,9 @@ public class NoteBookController {
     public String FormKySo(Model model,
             @RequestParam(name = "thang-hieu-luc", required = false) String thangHieuLuc) {
         model.addAttribute("timeLine",
-                timeLineService.findByEndDateAfterAndType(LocalDate.now(), Constant.TYPE_TIME_LINE.SO_DAU_BAI));
+                // timeLineService.findByEndDateAfterAndType(LocalDate.now(),
+                // Constant.TYPE_TIME_LINE.SO_DAU_BAI));
+                timeLineService.findByType(Constant.TYPE_TIME_LINE.SO_DAU_BAI));
         return "page/note-book/form";
     }
 

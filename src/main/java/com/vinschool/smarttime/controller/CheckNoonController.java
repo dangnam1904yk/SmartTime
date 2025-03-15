@@ -29,10 +29,10 @@ public class CheckNoonController {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         if (userPrincipal.getAuthorities().contains(Constant.ROLE_PREFIX.ADMIN)) {
             model.addAttribute("list",
-                    checkNoonService.findByUserIdCreateAndTimeLine(userPrincipal.getUser().getId(), "2025-01"));
+                    checkNoonService.findByUserIdCreate(userPrincipal.getUser().getId()));
         } else {
             model.addAttribute("list",
-                    checkNoonService.findByUserIdWorkAndTimeLine(userPrincipal.getUser().getId(), "2025-01"));
+                    checkNoonService.findByUserIdWork(userPrincipal.getUser().getId()));
 
         }
         model.addAttribute("listUser", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));

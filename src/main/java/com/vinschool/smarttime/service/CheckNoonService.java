@@ -3,12 +3,8 @@ package com.vinschool.smarttime.service;
 import java.util.List;
 
 import com.vinschool.smarttime.entity.CheckNoon;
-import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
-import com.vinschool.smarttime.model.request.CheckNoonRequest;
 import com.vinschool.smarttime.model.response.CheckNoonResponsive;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 public interface CheckNoonService {
     void save(CheckNoon checkNoon);
@@ -26,6 +22,10 @@ public interface CheckNoonService {
     List<CheckNoonResponsive> findByUserIdWorkAndTimeLineDto(String uesrid, String month);
 
     List<CheckNoonResponsive> findByUserIdCreateAndTimeLineDto(String userid, String month);
+
+    List<CheckNoon> findByUserIdWork(String uesrid);
+
+    List<CheckNoon> findByUserIdCreate(String userid);
 
     // List<CheckNoonResponsive> findByUserIdCreateAndTimeLineDtoNameJDPC(String
     // userid, String month);

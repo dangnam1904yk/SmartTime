@@ -70,6 +70,10 @@ public class SecurityConfig {
                 // .sessionManagement(session ->
                 // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .rememberMe((remember) -> remember
+                        .tokenValiditySeconds(10800) // Thời gian hiệu lực của remember-me token (tinh bang s)
+                        .userDetailsService(customUserDetailsService)
+                        .key("uniqueAndSecret"))
                 .authorizeHttpRequests(authorize -> {
                     // Cấu hình từ file JSON trước
                     // for (SecurityConfigReader.SecurityRule rule : rules) {
@@ -93,7 +97,7 @@ public class SecurityConfig {
                             if (methods != null && !methods.isEmpty()) {
                                 for (String methodStr : methods) {
                                     HttpMethod method = HttpMethod.valueOf(methodStr);
-                                    // Cấu hình TRỰC TIẾP trong lambda, không gán cho biến
+                                    // Cấu hình TRỰC TIẾP trong lambda
                                     if (rule.getRoles() != null && !rule.getRoles().isEmpty()) {
                                         authorize.requestMatchers(mvcMatcherBuilder.pattern(method, endpoint))
                                                 .hasAnyAuthority(rule.getRoles().toArray(new String[0]));

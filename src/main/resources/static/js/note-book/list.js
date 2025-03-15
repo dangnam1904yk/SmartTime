@@ -44,22 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
          formAction.submit();
     });
 
-    // submitDataButton.addEventListener("click", function () {
-
-    //     dataInput.value = JSON.stringify(listSoDauBai); // Gắn JSON vào input hidden
-    //     selectedDataForm.submit(); // Gửi form
-
-    // });
-
-
-    // Notification.requestPermission().then(permission => {
-    //     if (permission === "granted") {
-    //         alert("Thông báo đã được kích hoạt!");
-    //     } else {
-    //         alert("Bạn đã từ chối thông báo.");
-    //     }
-    // });
-
 });
 
 function Delete(id){

@@ -152,4 +152,14 @@ public class CheckNoonServiceImpl implements CheckNoonService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<CheckNoon> findByUserIdWork(String uesrid) {
+        return noonService.findByUserIdWork(uesrid);
+    }
+
+    @Override
+    public List<CheckNoon> findByUserIdCreate(String userid) {
+        return noonService.findByUserIdCreate(userid);
+    }
 }
