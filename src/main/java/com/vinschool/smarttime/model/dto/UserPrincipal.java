@@ -1,15 +1,12 @@
 package com.vinschool.smarttime.model.dto;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.projection.UserProjection;
 
 import lombok.Data;

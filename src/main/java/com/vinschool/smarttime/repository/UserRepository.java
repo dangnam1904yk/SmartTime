@@ -1,14 +1,13 @@
 package com.vinschool.smarttime.repository;
 
-import com.vinschool.smarttime.entity.User;
-import com.vinschool.smarttime.model.projection.UserProjection;
-
 import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.projection.UserProjection;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {

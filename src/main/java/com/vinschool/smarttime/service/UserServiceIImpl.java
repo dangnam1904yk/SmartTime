@@ -1,22 +1,18 @@
 package com.vinschool.smarttime.service;
 
-import com.vinschool.smarttime.entity.Role;
-import com.vinschool.smarttime.entity.User;
-import com.vinschool.smarttime.repository.UserRepository;
-import com.vinschool.smarttime.ulti.HashPassword;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import com.vinschool.smarttime.entity.Role;
+import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

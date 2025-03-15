@@ -1,15 +1,12 @@
 package com.vinschool.smarttime.service;
 
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 
 import com.vinschool.smarttime.entity.TimeSheet;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 public interface TimeSheetService {
     TimeSheet save(TimeSheet timeSheet);

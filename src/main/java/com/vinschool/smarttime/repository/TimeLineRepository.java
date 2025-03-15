@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.model.dto.TimeLineDto;
-import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 
 @Repository
 public interface TimeLineRepository extends JpaRepository<TimeLine, String> {

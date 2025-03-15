@@ -13,7 +13,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.NoteBook;
-import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.NoteBookRepository;
 

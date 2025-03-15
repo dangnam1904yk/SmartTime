@@ -1,19 +1,19 @@
 package com.vinschool.smarttime.service;
 
-import com.vinschool.smarttime.entity.CategoryClass;
-import com.vinschool.smarttime.repository.CategoryClassRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import org.springframework.stereotype.Service;
+
+import com.vinschool.smarttime.entity.CategoryClass;
+import com.vinschool.smarttime.repository.CategoryClassRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryClassService implements  CategoryClassServiceImpl {
-    private  final CategoryClassRepository repository;
+public class CategoryClassService implements CategoryClassServiceImpl {
+    private final CategoryClassRepository repository;
 
     @Override
     public CategoryClass getById(String id) {
@@ -28,15 +28,15 @@ public class CategoryClassService implements  CategoryClassServiceImpl {
     @Override
     public void save(CategoryClass categoryClass) {
         CategoryClass category = null;
-        if(categoryClass.getId().isEmpty()){
-        category  = getByNameClass(categoryClass.getClassName());
-        }else {
-            category= findByNameClassAndIdIsNot(categoryClass.getClassName(),categoryClass.getId());
+        if (categoryClass.getId().isEmpty()) {
+            category = getByNameClass(categoryClass.getClassName());
+        } else {
+            category = findByNameClassAndIdIsNot(categoryClass.getClassName(), categoryClass.getId());
         }
-        if(categoryClass.getId().isEmpty()){
+        if (categoryClass.getId().isEmpty()) {
             categoryClass.setId(null);
         }
-        if(category == null){
+        if (category == null) {
             categoryClass.setCreateDate(new Date());
             repository.save(categoryClass);
         }
@@ -55,6 +55,6 @@ public class CategoryClassService implements  CategoryClassServiceImpl {
 
     @Override
     public CategoryClass findByNameClassAndIdIsNot(String nameClass, String id) {
-       return repository.findByClassNameAndIdIsNot(nameClass,id);
+        return repository.findByClassNameAndIdIsNot(nameClass, id);
     }
 }

@@ -1,9 +1,5 @@
 package com.vinschool.smarttime.controller;
 
-import java.net.http.HttpRequest;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,21 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vinschool.smarttime.entity.CheckNoon;
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
-import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 import com.vinschool.smarttime.service.CheckNoonService;
 import com.vinschool.smarttime.service.UserService;
 import com.vinschool.smarttime.ulti.Constant;
 import com.vinschool.smarttime.ulti.SecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CheckNoonController {

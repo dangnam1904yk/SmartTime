@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,16 +17,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.TimeLine;
 import com.vinschool.smarttime.entity.TimeSheet;
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
-import com.vinschool.smarttime.model.request.CheckNoonRequest;
 import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.repository.TimeSheetRepository;
 import com.vinschool.smarttime.ulti.Constant;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service

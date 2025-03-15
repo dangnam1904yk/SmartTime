@@ -1,6 +1,5 @@
 package com.vinschool.smarttime.service;
 
-import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,10 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,19 +15,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.CheckNoon;
 import com.vinschool.smarttime.entity.TimeLine;
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.mapper.CheckNoonMapper;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.request.CheckNoonRequest;
 import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 import com.vinschool.smarttime.repository.CheckNoonRepository;
-
-import com.vinschool.smarttime.repository.TimeLineRepository;
 import com.vinschool.smarttime.ulti.Constant;
 
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service

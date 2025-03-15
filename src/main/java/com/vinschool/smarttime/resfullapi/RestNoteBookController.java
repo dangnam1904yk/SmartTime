@@ -7,18 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
-import com.vinschool.smarttime.service.TimeLineService;
 import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.service.UserService;
-import com.vinschool.smarttime.ulti.Constant;
-import com.vinschool.smarttime.ulti.SecurityUtils;
 import com.vinschool.smarttime.ulti.Constant.ROLE;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.vinschool.smarttime.ulti.SecurityUtils;
 
 @RestController
 public class RestNoteBookController {

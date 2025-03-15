@@ -119,16 +119,4 @@ public class HomeController {
         }
         return "page/login";
     }
-
-    @GetMapping("/dang-xuat")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    @GetMapping("/t")
-    public String logoutt(Model model) {
-        model.addAttribute("errorMessage", "Yes");
-        return "share/error";
-    }
 }

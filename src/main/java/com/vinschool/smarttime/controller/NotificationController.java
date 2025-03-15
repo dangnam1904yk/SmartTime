@@ -7,14 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.DetailNotificationRepository;
-import com.vinschool.smarttime.ulti.SecurityUtils;
 import com.vinschool.smarttime.ulti.Constant.ROLE;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.vinschool.smarttime.ulti.SecurityUtils;
 
 @Controller
 public class NotificationController {

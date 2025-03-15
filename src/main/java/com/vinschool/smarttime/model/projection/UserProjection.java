@@ -3,8 +3,6 @@ package com.vinschool.smarttime.model.projection;
 import java.util.Date;
 import java.util.List;
 
-import com.vinschool.smarttime.model.dto.RoleDto;
-
 public interface UserProjection {
     String getId();
 
