@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vinschool.smarttime.entity.AccountSchedule;
-import com.vinschool.smarttime.entity.User;
+
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.AccountScheduleRepository;
 import com.vinschool.smarttime.service.SchedulerService;
 import com.vinschool.smarttime.service.UserService;
+import com.vinschool.smarttime.ulti.SecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AccountScheduleController {
@@ -29,14 +30,13 @@ public class AccountScheduleController {
     private UserService userService;
 
     @GetMapping("/cron")
+    // @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public String getMethodName(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        AccountSchedule schedule = scheduleRepository.findByUserId(user.getId());
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        AccountSchedule schedule = scheduleRepository.findByUserId(userPrincipal.getUser().getId());
         if (schedule != null) {
-            model.addAttribute("cron", scheduleRepository.findByUserId(user.getId()).getCronExpression());
+            model.addAttribute("cron",
+                    scheduleRepository.findByUserId(userPrincipal.getUser().getId()).getCronExpression());
         } else {
             model.addAttribute("cron", "");
         }
@@ -45,18 +45,16 @@ public class AccountScheduleController {
 
     @PostMapping("/cron")
     public String SaveCron(HttpServletRequest request, Model model, @RequestParam("cron") String cron) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        AccountSchedule accountSchedule = scheduleRepository.findByUserId(user.getId());
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        AccountSchedule accountSchedule = scheduleRepository.findByUserId(userPrincipal.getUser().getId());
         if (accountSchedule == null) {
             accountSchedule = new AccountSchedule();
         }
-        accountSchedule.setUser(userService.findById(user.getId()));
+        accountSchedule.setUser(userService.findById(userPrincipal.getUser().getId()));
         accountSchedule.setCronExpression(cron);
         scheduleRepository.save(accountSchedule);
-        schedulerService.scheduleNotification(user.getId(), user.getEmail(), cron);
+        schedulerService.scheduleNotification(userPrincipal.getUser().getId(), userPrincipal.getUser().getEmail(),
+                cron);
         model.addAttribute("succes", "Cập nhật thành công");
         return "page/cron/form";
     }

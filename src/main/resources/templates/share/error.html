@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">    
+    <head>
+        <title>Error page</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <h1>404</h1>
+        <p th:utext="${errorMessage}"></p>
+        <a href="index.html" th:href="@{/index.html}">Back to Home Page</a>
+    </body>
+</html>

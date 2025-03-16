@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.vinschool.smarttime.entity.CategoryPeriod;
-import com.vinschool.smarttime.entity.CategoryRoom;
-import com.vinschool.smarttime.entity.TimeLine;
-import com.vinschool.smarttime.entity.TimeSheet;
-import com.vinschool.smarttime.entity.User;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.response.TimeSheetResponsive;
 import com.vinschool.smarttime.service.CategoryClassService;
 import com.vinschool.smarttime.service.CategoryPeriodService;
@@ -24,9 +20,9 @@ import com.vinschool.smarttime.service.TimeLineService;
 import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.service.UserService;
 import com.vinschool.smarttime.ulti.Constant;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.vinschool.smarttime.ulti.Constant.ROLE;
+import com.vinschool.smarttime.ulti.Constant.ROLE_PREFIX;
+import com.vinschool.smarttime.ulti.SecurityUtils;
 
 @Controller
 public class TimeSheetController {
@@ -49,11 +45,7 @@ public class TimeSheetController {
     private TimeLineService timeLineService;
 
     @GetMapping("/lap-thoi-khoa-bieu")
-    public String FormLapThoiKhoaBieu(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
+    public String FormLapThoiKhoaBieu(Model model) {
         model.addAttribute("class", categoryClassService.getAll());
         model.addAttribute("rooms", categoryRoomSerive.getAll());
         model.addAttribute("period", categoryPeriodService.getAll());
@@ -63,28 +55,23 @@ public class TimeSheetController {
     }
 
     @PostMapping("/lap-thoi-khoa-bieu")
-    public String CreateTimeSheet(Model model, HttpServletRequest request,
+    public String CreateTimeSheet(Model model,
             @RequestParam("data") String dataTimeSheetStr,
             @RequestParam("timeLine") String dataTimeLine) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        timeSheetService.createTimeSheet(dataTimeSheetStr, dataTimeLine, request);
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
+        timeSheetService.createTimeSheet(dataTimeSheetStr, dataTimeLine, userPrincipal);
         return "redirect:/lap-thoi-khoa-bieu";
     }
 
     @GetMapping("/thoi-khoa-bieu")
-    public String ThoiKhoaBieu(Model model, HttpServletRequest request,
+    public String ThoiKhoaBieu(Model model,
             @RequestParam(name = "timeLine", required = false) String timeLine,
             @RequestParam(name = "giaovien", required = false) String userId) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         List<TimeSheetResponsive> list = new ArrayList<>();
 
-        if (user.getEmail().toLowerCase().startsWith("admin")) {
+        if (userPrincipal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(Constant.ROLE_PREFIX.ADMIN))) {
             if (timeLine == null || timeLine.equals("")) {
                 list = timeSheetService.getAllTimeSheetResponsive();
             } else {
@@ -93,13 +80,14 @@ public class TimeSheetController {
             }
         } else {
             if (timeLine == null || timeLine.equals("")) {
-                list = timeSheetService.getTimeSheetResponsiveByUserIdTeach(user.getId());
+                list = timeSheetService.getTimeSheetResponsiveByUserIdTeach(userPrincipal.getUser().getId());
             } else {
-                list = timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeach(timeLine, user.getId());
+                list = timeSheetService.findTimeSheetByIdTimeLineAndUserIdTeach(timeLine,
+                        userPrincipal.getUser().getId());
             }
         }
         model.addAttribute("timeSheets", list);
-        model.addAttribute("userLogin", user);
+        model.addAttribute("userLogin", userPrincipal.getUser());
         model.addAttribute("timeLineSearch", timeLine);
         model.addAttribute("userSearch", userId);
         model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));

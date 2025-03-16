@@ -5,7 +5,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import com.vinschool.smarttime.entity.AccountSchedule;
 import com.vinschool.smarttime.repository.AccountScheduleRepository;
 import com.vinschool.smarttime.service.SchedulerService;
 

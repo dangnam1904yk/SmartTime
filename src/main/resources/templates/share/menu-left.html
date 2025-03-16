@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!-- Sidebar Start -->
+ <html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><!-- Sidebar Start -->
 <div class="sidebar pe-4 pb-3" th:fragment="nav-left" style="background: #e9e9e9">
     <nav class="navbar" style="background: linear-gradient(to right, #72f1f9, #e9e9e9);">
         <a href="/" class="navbar-brand mx-4 mb-3">
@@ -20,12 +20,12 @@
                 </div>
             </div>
             <div class="ms-3">
-                <h6 class="mb-0" th:text="${session.user.fullName}">Jhon Doe</h6>
-                <span  th:text="${session.user.email}"></span>
+                <h6 class="mb-0" sec:authentication="principal.fullName" >Jhon Doe</h6>
+                <h6 class="mb-0" sec:authentication="principal.username" >Jhon Doe</h6>
             </div>
         </div>
         <div class="navbar-nav w-100">
-            <a href="/danh-sach-thong-bao" class="nav-item nav-link"><i class="fa fa-bell me-lg-2"></i>Thông báo</a>
+            <a href="/danh-sach-thong-bao" sec:authorize="hasAnyRole('ROLE_GIAOVIEN', 'ROLE_ADMIN', 'ROLE_NHANVIEN')" class="nav-item nav-link"><i class="fa fa-bell me-lg-2"></i>Thông báo</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                         class="fa fa-laptop me-2"></i>Danh mục</a>
@@ -35,31 +35,15 @@
                     <a href="/" class="dropdown-item">Phòng dạy</a>
                 </div>
             </div>
-            <a th:href="@{/thoi-khoa-bieu}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Thời khóa biểu</a>
-            <th:block th:if="${session.sesionRole.contains('ADMIN')}"> 
-                <a th:href="@{/lap-thoi-khoa-bieu}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch dạy</a>
+            <a th:href="@{/thoi-khoa-bieu}" sec:authorize="hasAnyRole('ROLE_GIAOVIEN', 'ROLE_ADMIN')" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Thời khóa biểu</a>
+             <a th:href="@{/lap-thoi-khoa-bieu}"  sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch dạy</a>
             
-            </th:block>
-            <a href="/danh-sach" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Sổ đầu bài</a>
-            <a href="/ky-so-dau-bai" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Nhập sổ đầu bài</a>
-            <th:block th:if="${session.sesionRole.contains('ADMIN')}"> 
-            <a th:href="@{/lap-lich-trong-trua}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch trông trưa</a>
-            </th:block>
-            <a th:href="@{/trong-trua}" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Chấm công TT</a>
+
+            <a href="/danh-sach" sec:authorize="hasAnyRole('ROLE_GIAOVIEN', 'ROLE_ADMIN')" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Sổ đầu bài</a>
+            <a href="/ky-so-dau-bai" sec:authorize="hasAnyRole('ROLE_GIAOVIEN', 'ROLE_ADMIN')" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Nhập sổ đầu bài</a>
+            <a th:href="@{/lap-lich-trong-trua}" sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Lập lịch trông trưa</a>
+            <a th:href="@{/trong-trua}" sec:authorize="hasAnyRole('ROLE_NHANVIEN', 'ROLE_GIAOVIEN','ROLE_ADMIN')" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Chấm công TT</a>
             <a th:href="@{/cron}" class="nav-item nav-link"><i class="fa fa-th me-2"></i> Cấu hình check sổ</a>
-            
-
-
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                        class="far fa-file-alt me-2"></i>Pages</a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <a href="/" class="dropdown-item">Sign In</a>
-                    <a href="/" class="dropdown-item">Sign Up</a>
-                    <a href="/" class="dropdown-item">404 Error</a>
-                    <a href="/" class="dropdown-item">Blank Page</a>
-                </div>
-            </div>
         </div>
     </nav>
 </div>

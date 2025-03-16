@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+ <html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{/share/header :: header}">
 
 </head>
@@ -32,6 +32,7 @@
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">Tổng giáo viên</p>
+                                <p sec:authentication="principal.authorities"></p>
                                 <h6 class="mb-0">1234</h6>
                             </div>
                         </div>

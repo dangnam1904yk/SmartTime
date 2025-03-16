@@ -1,13 +1,14 @@
 package com.vinschool.smarttime.service;
 
-import com.vinschool.smarttime.entity.Role;
-import com.vinschool.smarttime.entity.User;
-import com.vinschool.smarttime.repository.RoleRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.vinschool.smarttime.entity.Role;
+import com.vinschool.smarttime.repository.RoleRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

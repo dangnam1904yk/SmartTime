@@ -1,23 +1,25 @@
 package com.vinschool.smarttime.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.vinschool.smarttime.entity.Role;
 import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.repository.UserRepository;
-import com.vinschool.smarttime.ulti.HashPassword;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceIImpl implements UserService {
     private final UserRepository repository;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User save(User user, String role) {
@@ -34,7 +36,7 @@ public class UserServiceIImpl implements UserService {
         if (user.getId() == null || user.getId() == "") {
             userCheck = repository.findByEmail(user.getEmail());
             if (userCheck == null) {
-                user.setPassword(HashPassword.hashPass(user.getPassword()));
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setCreateDate(new Date());
                 user.setCreateDate(new Date());
                 user.setId(null);
@@ -69,7 +71,7 @@ public class UserServiceIImpl implements UserService {
     }
 
     @Override
-    public User finByEmail(String email) {
+    public User findByEmail(String email) {
         return repository.findByEmail(email);
     }
 

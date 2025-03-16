@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <nav class="navbar navbar-expand  sticky-top px-4 py-0" th:fragment="header-top" style="background:linear-gradient(to top, #72f1f9, #e9e9e9); ;" >
     <a href="/" class="navbar-brand d-flex d-lg-none me-4">
@@ -40,12 +41,13 @@
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img class="rounded-circle me-lg-2" th:src="@{img/images.jfif}" alt="" style="width: 40px; height: 40px;">
-                <span class="d-none d-lg-inline-flex"  th:text="${session.user.fullName}">John Doe</span>
+                <span class="d-none d-lg-inline-flex"  sec:authentication="principal.fullName"  >John Doe</span> 
             </a>
             <div class="dropdown-menu dropdown-menu-end  border-0 rounded-0 rounded-bottom m-0">
                 <a href="#" class="dropdown-item">My Profile</a>
                 <a href="#" class="dropdown-item">Settings</a>
-                <a href="/dang-xuat" class="dropdown-item">Log Out</a>
+                <form th:action="@{/dang-xuat}" method="post"><button type="submit" class="dropdown-item">Log Out</button></form>
+                
             </div>
         </div>
     </div>

@@ -1,33 +1,30 @@
 package com.vinschool.smarttime.controller;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.vinschool.smarttime.entity.DetailNotification;
-import com.vinschool.smarttime.entity.Notification;
 import com.vinschool.smarttime.entity.User;
-import com.vinschool.smarttime.model.response.TimeSheetChekNotification;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.repository.DetailNotificationRepository;
 import com.vinschool.smarttime.repository.NotificationRepository;
 import com.vinschool.smarttime.service.RoleService;
 import com.vinschool.smarttime.service.TimeSheetService;
 import com.vinschool.smarttime.service.UserService;
-import com.vinschool.smarttime.ulti.Constant;
 import com.vinschool.smarttime.ulti.HashPassword;
+import com.vinschool.smarttime.ulti.SecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -48,18 +45,19 @@ public class HomeController {
     @Autowired
     private DetailNotificationRepository detailNotificationRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/")
-    public String Index(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null)
-            return "redirect:/dang-nhap";
-        model.addAttribute("user", user.getId());
-        session.setAttribute("sesionUser", user);
-        if (user.getEmail().startsWith("admin")) {
+    public String Index(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        var userDetail = SecurityUtils.getCurrentUser();
+        UserPrincipal userPrincipal = (UserPrincipal) userDetail;
+        model.addAttribute("user", userPrincipal.user);
+        if (userDetail.getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ADMIN"))) {
             model.addAttribute("countNoti", detailNotificationRepository.count());
         } else {
-            model.addAttribute("countNoti", detailNotificationRepository.countByUserId(user.getId()));
+            model.addAttribute("countNoti",
+                    detailNotificationRepository.countByUserId(userPrincipal.user.getId()));
         }
         return "page/index";
     }
@@ -93,38 +91,5 @@ public class HomeController {
     @GetMapping("/dang-nhap")
     public String FormLogin(Model model) {
         return "page/login";
-    }
-
-    @PostMapping("/dang-nhap")
-    public String Login(Model model, @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        User user = userService.finByEmail(email);
-        if (user == null) {
-            model.addAttribute("error", "Đăng nhập thất bại");
-            return "page/login";
-        }
-        boolean check = HashPassword.checkPass(password, user.getPassword());
-
-        if (check == true) {
-            session.setAttribute("user", user);
-            List<String> role = new ArrayList<String>();
-            for (int i = 0; i < user.getRole().size(); i++) {
-                role.add(user.getRole().get(i).getCodeRole());
-            }
-            session.setAttribute("sesionRole", role);
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Đăng nhập thất bại");
-        }
-        return "page/login";
-    }
-
-    @GetMapping("/dang-xuat")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
     }
 }

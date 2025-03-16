@@ -1,0 +1,183 @@
+[
+    {
+        "endpoint": "/admin/**",
+        "roles": [
+            "ADMIN"
+        ]
+    },
+    {
+        "endpoint": "/user/**",
+        "roles": [
+            "USER"
+        ]
+    },
+    {
+        "endpoint": "/cron",
+        "methods": [
+            "POST",
+            "GET"
+        ],
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_NHANVIEN"
+        ],
+        "permission": [
+            "ADD",
+            "DELETE"
+        ]
+    },
+    {
+        "endpoint": "/api/notebook/getByTimeLine",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/timeLine/get-by-type",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/dm-lop-hoc",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/dm-lop-hoc/save",
+        "roles": [
+            "ROLE_ADMIN"
+        ],
+        "methods":["GET","POST"]
+    },
+    {
+        "endpoint": "/dm-lop-hoc/delete",
+        "roles": [
+            "ROLE_ADMIN"
+        ]
+    },
+    {
+        "endpoint": "/dm-tiet-hoc",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/trong-trua",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/lap-lich-trong-trua",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ],
+        "methods":["GET"]
+    },
+    {
+        "endpoint": "/lap-lich-trong-trua",
+        "roles": [
+            "ROLE_ADMIN"
+        ],
+        "methods":["POST"]
+    },
+    {
+        "endpoint": "/cham-cong",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+
+    {
+        "endpoint": "/",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/ky-so-dau-bai",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/danh-sach",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/cap-nhat-trang-thai",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/ky-so-dau-bai/edit**",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/danh-sach-thong-bao",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN",
+            "ROLE_NHANVIEN"
+        ]
+    },
+    {
+        "endpoint": "/lap-thoi-khoa-bieu",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/thoi-khoa-bieu",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/user",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/user/save",
+        "roles": [
+            "ROLE_ADMIN",
+            "ROLE_GIAOVIEN"
+        ]
+    },
+    {
+        "endpoint": "/public/**",
+        "roles": []
+    }
+]

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+ <html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{/share/header :: header}">
 
 </head>
@@ -106,7 +106,6 @@
                             
                             <label for="categorytimeLine" class="font-weight-bold">Chọn thời gian</label>
                             <select id="categorytimeLine" class="form-control">
-
                                 <th:block th:each="item :${timeLine}">
                                     <option th:value="${item.id}" th:text="${item.nameTimeLine}">
                                     </option>

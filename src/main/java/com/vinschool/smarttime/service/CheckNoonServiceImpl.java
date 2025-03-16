@@ -1,6 +1,5 @@
 package com.vinschool.smarttime.service;
 
-import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,10 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,18 +15,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vinschool.smarttime.entity.CheckNoon;
 import com.vinschool.smarttime.entity.TimeLine;
-import com.vinschool.smarttime.entity.User;
 import com.vinschool.smarttime.mapper.CheckNoonMapper;
+import com.vinschool.smarttime.model.dto.UserPrincipal;
 import com.vinschool.smarttime.model.request.CheckNoonRequest;
 import com.vinschool.smarttime.model.response.CheckNoonResponsive;
 import com.vinschool.smarttime.repository.CheckNoonRepository;
-
-import com.vinschool.smarttime.repository.TimeLineRepository;
 import com.vinschool.smarttime.ulti.Constant;
 
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -58,10 +48,7 @@ public class CheckNoonServiceImpl implements CheckNoonService {
     }
 
     @Override
-    public void LuuPhanCongLich(String request, String timeLine, HttpServletRequest servletRequest) {
-        HttpSession session = servletRequest.getSession();
-        User user = (User) session.getAttribute("user");
-
+    public void LuuPhanCongLich(String request, String timeLine, UserPrincipal user) {
         ObjectMapper objectMapper = new ObjectMapper();
         TimeLine timeLineDb = new TimeLine();
         List<Map<String, Object>> dataList;
@@ -86,7 +73,7 @@ public class CheckNoonServiceImpl implements CheckNoonService {
                 noonRequest.setDateWork(LocalDate.parse(item.get("date").toString()));
                 noonRequest.setIdUser(item.get("idUser").toString());
                 noonRequest.setCreateDate(new Date());
-                noonRequest.setCreateBy(user.getId());
+                noonRequest.setCreateBy(user.getUser().getId());
                 noonRequest.setMaCa(item.get("codeCa").toString());
                 noonRequest.setNameCa(item.get("nameCa").toString());
                 noonRequest.setTimeLine(timeLineSave);
@@ -131,10 +118,7 @@ public class CheckNoonServiceImpl implements CheckNoonService {
     // }
 
     @Override
-    public void ChamCong(String data, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
+    public void ChamCong(String data, UserPrincipal user) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Map<String, Object>> dataList;
         try {
@@ -167,5 +151,15 @@ public class CheckNoonServiceImpl implements CheckNoonService {
 
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<CheckNoon> findByUserIdWork(String uesrid) {
+        return noonService.findByUserIdWork(uesrid);
+    }
+
+    @Override
+    public List<CheckNoon> findByUserIdCreate(String userid) {
+        return noonService.findByUserIdCreate(userid);
     }
 }

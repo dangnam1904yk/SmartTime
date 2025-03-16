@@ -58,4 +58,14 @@ public interface CheckNoonRepository extends JpaRepository<CheckNoon, String> {
         public List<CheckNoonResponsive> findByUserIdCreateAndTimeLineDto(@Param("userid") String userid,
                         @Param("timeLine") String timeLine);
 
+        @Modifying
+        @Transactional
+        @Query(value = "SELECT C.Id, C.date_work, c.id_user_trans, c.is_check, c.Ma_ca,c.name_ca, note, id_user, id_time_line, create_by,create_date, is_active, update_by,update_date, month FROM CHECK_NOON C JOIN TIME_LINE L ON C.ID_TIME_LINE = L.ID   WHERE C.ID_USER =:userid ", nativeQuery = true)
+        public List<CheckNoon> findByUserIdWork(@Param("userid") String userid);
+
+        @Modifying
+        @Transactional
+        @Query(value = "SELECT C.Id, C.date_work, c.id_user_trans, c.is_check, c.Ma_ca,c.name_ca, note, id_user, id_time_line, create_by,create_date, is_active,update_by, update_date, month FROM CHECK_NOON C JOIN TIME_LINE L ON C.ID_TIME_LINE = L.ID   WHERE C.CREATE_BY =:userid", nativeQuery = true)
+        public List<CheckNoon> findByUserIdCreate(@Param("userid") String userid);
+
 }

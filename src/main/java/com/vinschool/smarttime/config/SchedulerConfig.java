@@ -13,7 +13,7 @@ public class SchedulerConfig {
         return new SchedulerFactoryBean();
     }
 
-    // Tạo lịch trình (ví dụ minh họa)
+    // Tạo lịch trình
     @Bean
     public JobDetail sampleJobDetail() {
         return JobBuilder.newJob(NotificationJob.class)

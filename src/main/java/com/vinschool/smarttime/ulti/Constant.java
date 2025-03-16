@@ -9,7 +9,11 @@ public interface Constant {
     public interface ROLE {
         public final String GIAO_VIEN = "GIAOVIEN";
         public final String ADMIN = "ADMIN";
+    }
 
+    public interface ROLE_PREFIX {
+        public final String GIAO_VIEN = "_ROLE_GIAOVIEN";
+        public final String ADMIN = "ROLE_ADMIN";
     }
 
     public interface SATATUS {
