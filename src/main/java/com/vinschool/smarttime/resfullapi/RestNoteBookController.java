@@ -28,7 +28,8 @@ public class RestNoteBookController {
             @RequestParam(name = "giaovien", required = false) String userId) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         List<TimeSheetResponsive> list = timeSheetService.findTimeSheetWithNoteBook();
-        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
+        if (userPrincipal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(ROLE_PREFIX.ADMIN))) {
             if (timLineId == null || timLineId.isEmpty()) {
                 list = timeSheetService.findTimeSheetWithNoteBook();
 

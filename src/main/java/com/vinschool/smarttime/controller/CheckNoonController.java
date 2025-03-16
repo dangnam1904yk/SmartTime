@@ -27,7 +27,8 @@ public class CheckNoonController {
     @GetMapping("/trong-trua")
     public String CreatDate(Model model) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
-        if (userPrincipal.getAuthorities().contains(Constant.ROLE_PREFIX.ADMIN)) {
+        if (userPrincipal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(Constant.ROLE_PREFIX.ADMIN))) {
             model.addAttribute("list",
                     checkNoonService.findByUserIdCreate(userPrincipal.getUser().getId()));
         } else {

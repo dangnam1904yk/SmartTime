@@ -33,7 +33,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email: " + username);
         }
         logger.info("User found: {}", user.getEmail());
-        user.getRole().size();
         return new UserPrincipal(user);
     }
 }

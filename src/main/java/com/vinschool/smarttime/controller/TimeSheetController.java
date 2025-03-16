@@ -70,7 +70,8 @@ public class TimeSheetController {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityUtils.getCurrentUser();
         List<TimeSheetResponsive> list = new ArrayList<>();
 
-        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
+        if (userPrincipal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(Constant.ROLE_PREFIX.ADMIN))) {
             if (timeLine == null || timeLine.equals("")) {
                 list = timeSheetService.getAllTimeSheetResponsive();
             } else {

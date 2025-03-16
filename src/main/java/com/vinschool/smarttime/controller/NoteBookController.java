@@ -64,7 +64,8 @@ public class NoteBookController {
         model.addAttribute("users", userService.findUserByCodeRole(Constant.ROLE.GIAO_VIEN));
 
         List<TimeSheetResponsive> list = new ArrayList<>();
-        if (userPrincipal.getAuthorities().contains(ROLE_PREFIX.ADMIN)) {
+        if (userPrincipal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(Constant.ROLE_PREFIX.ADMIN))) {
             if (timLineId == null || timLineId.isEmpty()) {
                 list = timeSheetService.findTimeSheetWithNoteBook();
 

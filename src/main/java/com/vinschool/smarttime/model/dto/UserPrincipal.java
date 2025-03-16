@@ -24,9 +24,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println(user.getRole().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getCodeRole()))
-                .collect(Collectors.toList()));
         return user.getRole().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getCodeRole()))
                 .collect(Collectors.toList());
