@@ -19,7 +19,8 @@
         ],
         "roles": [
             "ROLE_ADMIN",
-            "ROLE_NHANVIEN"
+            "ROLE_NHANVIEN",
+            "ROLE_GIAOVIEN"
         ],
         "permission": [
             "ADD",

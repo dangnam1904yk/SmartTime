@@ -40,7 +40,6 @@ public class NotificationService {
 
     public void sendScheduledNotifications(String accountId, String message) {
         // Xử lý logic gửi thông báo
-        String notificationMessage = "Chạy cho tài khoản: " + accountId + " với thông báo: " + message;
         LocalDate curenDate = LocalDate.now();
         DayOfWeek dayOfWeek = curenDate.getDayOfWeek();
         String thu = "";
@@ -144,12 +143,12 @@ public class NotificationService {
                     detailNotificationRepository.save(detailNotification);
                 }
             }
+            if (notificationResponsive.getTitle() != null && !notificationResponsive.getTitle().isEmpty()) {
 
+                messagingTemplate.convertAndSend("/topic/notifications", notificationResponsive);
+            }
         }
-        if (notificationResponsive.getTitle() != null && !notificationResponsive.getTitle().isEmpty()) {
 
-            messagingTemplate.convertAndSend("/topic/notifications", notificationResponsive);
-        }
     }
 
     private static boolean isTimeInRange(LocalTime time, LocalTime start, LocalTime end) {
