@@ -284,9 +284,9 @@
         stompClient.subscribe('/topic/notifications', function (message) {
           
            const user = [[${user}]]
-           console.log(user);
+           //console.log(user);
            const data = JSON.parse(message.body);
-           if(data.userId===user){
+           if(data.userId===user.id){
             showBrowserNotification(data.title, data.content, data?.icon);
            }
         });

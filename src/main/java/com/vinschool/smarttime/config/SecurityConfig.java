@@ -68,7 +68,8 @@ public class SecurityConfig {
         http // .csrf(AbstractHttpConfigurer::disable)
                 .csrf(Customizer.withDefaults())
                 // .sessionManagement(session ->
-                // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) Neu la RESful
+                // API
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .rememberMe((remember) -> remember
                         .tokenValiditySeconds(10800) // Thời gian hiệu lực của remember-me token (tinh bang s)

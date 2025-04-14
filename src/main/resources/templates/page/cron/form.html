@@ -103,6 +103,7 @@
                 <div class="row g-4" style="padding-bottom: 10px;">
                     <div class="col-4 col-md-4">
                         <form action="/cron" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <div class="form-group">
                             
                                 <label for="categorytimeLine" class="font-weight-bold">Cấu hình thời gian chạy kiểm tra nhập sổ đầu bài</label>

@@ -21,7 +21,7 @@
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <a href="/" class="">
-                                <img th:src="@{/img/logo.webp}" style="max-width: 70px;">
+                                <img th:src="@{/img/Logo1.png}" style="max-width: 70px;">
                             </a>
                             <h5>Đăng ký tài khoản</h5>
                         </div>
@@ -48,6 +48,7 @@
                             </div>
                             <a href="">Quên mật khẩu</a>
                         </div>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Đăng ký</button>
                     </form>
                         <p class="text-center mb-0">Đã có tài khoản <a  th:href="@{/dang-nhap}">Đăng nhập</a></p>

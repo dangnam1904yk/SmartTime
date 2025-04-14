@@ -24,19 +24,13 @@ public class NotificationJob implements Job {
         String message = context.getJobDetail().getJobDataMap().getString("message");
 
         // Gọi đến hàm bạn muốn thực thi
-        NotificationMessages(message);
         // Lấy NotificationService từ ApplicationContext
         NotificationService notificationService = SpringContext.getBean(NotificationService.class);
 
         // Gọi hàm xử lý trong service
         notificationService.sendScheduledNotifications(accountId, message);
 
-        System.out.println("Chạy cho tài khoản: " + accountId + " với thông báo: " + message);
-    }
-
-    // Hàm cần chạy
-    private void NotificationMessages(String data) {
-        System.out.println("Thông báo: " + data);
+        System.out.println("CHAY CHO TK: " + accountId + " VOI USENAME: " + message);
     }
 
     public void sendScheduledNotifications() {
